@@ -1,7 +1,3 @@
 =Project Owners= 
 * Angel Blesa 
 * Miguel Monreal
-
-=Project Contributors= 
-* Angel Blesa 
-* Miguel Monreal
