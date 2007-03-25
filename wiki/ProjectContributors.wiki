@@ -1,14 +1,2 @@
-= 
-<h1>Project Owners</h1>
-<ul>
-<li>Angel Blesa</li>
-<li>Miguel Monreal</li>
-</ul>
-<h1>Project Contributors</h1>
-<ul>
-<li><a href="http://ablesa.wordpress.com" rel="nofollow">Angel Blesa</a> </li>
-<li><a href="http://mmonreal.wordpress.com" rel="nofollow">Miguel Monreal</a> </li>
-</ul>
-<h1>Want to Contribute?</h1>
-<p>See the <a href="/p/guasax/wiki/HowToContribute">HowToContribute</a> page. </p>
-=
+Angel Blesa
+Miguel Monreal
