@@ -27,7 +27,7 @@ Press "OK" to commit your changes.
 Then you ought to create a locale folder (in your project root), and inside it another one called en_US. In other words, you must create the next skeleton:
 
 +ROOT-PROJECT-FOLDER
-     |
+      |
      +*locale*
              |
             +*en_US*
@@ -42,7 +42,6 @@ Relativo al source path del codigo fuente
 
 
 Aconsejamos la siguiente estructura de directorios para un proyecto Flex:
-
 
 
 
