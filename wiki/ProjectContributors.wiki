@@ -1,4 +1,4 @@
-#summary people behind guasax
+#summary Who are behind guasax?
 
 =Project Owners=
  * Angel Blesa [http://ablesa.wordpress.com]
