@@ -1,4 +1,4 @@
-#summary Quick guide to start using guasax framework .
+#summary Quick guide to get started using guasax framework .
 
 = Introduction =
 
@@ -27,7 +27,6 @@ A more complete quickstart is coming soon in [http://www.guasax.com]
    -source-path+=../locale/{locale} -locale=en_US
 
 *Note* that this path is relative to source code path
-
 
 
 
