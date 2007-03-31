@@ -22,11 +22,12 @@ A more complete quickstart is coming soon in [http://www.guasax.com]
                     |
                    +*en_US*
                           |
-                         _"GuasaxMessages".properties_
+                         _{{{GuasaxMessages}}}.properties_
  # Finally, on the project name in the project navigator, right click and select Properties.Then, on the left, select "Flex Compiler" and include in the textbox behind 'Additional compiler arguments' the next line:
    -source-path+=../locale/{locale} -locale=en_US
 
 *Note* that this path is relative to source code path
+
 
 
 
