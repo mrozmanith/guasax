@@ -4,11 +4,15 @@
 
 A more complete quickstart is coming soon in [http://www.guasax.com]
 
+= Adding guasax library =
 
-= Using guasax =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Create a new Flex project in FlexBuilder.
+Create a lib directory in your Flex project
+Extract to lib directory the content of guasaxlib-0.9.zip (it contents the guasaxlib.swc file)
+On the project name in the project navigator, right click and select Properties.
+On the left, select "Flex Build Path".
+Select "Library path" tab.
+Click the "Add SWC" button.
+Browse in the filesystem to locate the guasaxlib.swc file where you had extracted it from guasaxlib-0.9.zip.
+Press "OK" to commit your changes. 
 
