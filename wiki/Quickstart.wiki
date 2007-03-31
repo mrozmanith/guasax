@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#Quick guide to .
 
 = Introduction =
 
@@ -6,7 +6,7 @@ A more complete quickstart is coming soon in [http://www.guasax.com]
 
 = Adding guasax library =
 
-Create a new Flex project in FlexBuilder.
+Create a new Flex project in Flex Builder.
 
 Create a lib directory in your Flex project
 
@@ -23,4 +23,3 @@ Click the "Add SWC" button.
 Browse in the filesystem to locate the guasaxlib.swc file where you had extracted it from guasaxlib-0.9.zip.
 
 Press "OK" to commit your changes. 
-
