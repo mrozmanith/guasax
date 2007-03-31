@@ -6,42 +6,42 @@ A more complete quickstart is coming soon in [http://www.guasax.com]
 
 = Adding guasax library =
 
-Create a new Flex project in Flex Builder.
+# Create a new Flex project in Flex Builder.
 
-Create a lib directory in your Flex project
+# Create a lib directory in your Flex project
 
-Extract to lib directory the content of guasaxlib-0.9.zip (it contents the guasaxlib.swc file)
+# Extract to lib directory the content of guasaxlib-0.9.zip (it contents the guasaxlib.swc file)
 
-On the project name in the project navigator, right click and select Properties.
+# On the project name in the project navigator, right click and select Properties.
 
-On the left, select "Flex Build Path".
+# On the left, select "Flex Build Path".
 
-Select "Library path" tab.
+# Select "Library path" tab.
 
-Click the "Add SWC" button.
+# Click the "Add SWC" button.
 
-Browse in the filesystem to locate the guasaxlib.swc file where you had extracted it from guasaxlib-0.9.zip.
+# Browse in the filesystem to locate the guasaxlib.swc file where you had extracted it from guasaxlib-0.9.zip.
 
-Press "OK" to commit your changes. 
+# Press "OK" to commit your changes. 
 
-Then you ought to create a locale folder (in your project root), and inside it another one called en_US. In other words, you must create the next skeleton:
+# The next step is to create a locale folder (in your project root),then put inside it the en_US folder extracted from guasaxlib-0.9.zip.You get the next skeleton:
 
 +ROOT-PROJECT-FOLDER
       |
      +*locale*
              |
             +*en_US*
+                   |
+                   _GuasaxMessages.properties_
 
-Crear el directorio locale/en_US en tu raiz y añadir el fichero de mensajes de guasax (GuasaxMessages.properties)
-
-Editar las propiedades del proyecto y en la opcion Flex Compiler añadir en los argumentos la siguiente linea:
+# Finally, on the project name in the project navigator, right click and select Properties.Then, on the left, select "Flex Compiler" and include in the textbox behind
+'Additional compiler arguments' the next line:
 
 -source-path+=../locale/{locale} -locale=en_US
 
-Relativo al source path del codigo fuente
+*Note* that this path is relative to source code path
 
 
-Aconsejamos la siguiente estructura de directorios para un proyecto Flex:
 
 
 
