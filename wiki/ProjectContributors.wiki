@@ -1,2 +1,5 @@
  * Angel Blesa
  * Miguel Monreal
+
+Collaborators
+ * Luis Miguel Ferrer (Graphic Designer)
