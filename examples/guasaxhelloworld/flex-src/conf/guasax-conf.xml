@@ -1,0 +1,11 @@
+<!--
+	author:      angel.blesa@gmail.com
+	date:        20/03/2007 
+	description: HelloWorld example, A single action component.
+-->
+<guasax version="0.9" description="Guasax Flex Framework">
+	<component id="helloworld" className="es.guasax.samples.helloworld.bo.HelloWorldBO" enabled="true">
+		<action id="sayHello"      method="sayHello"      roles="*">
+		</action>
+	</component>
+</guasax>

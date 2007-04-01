@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init()" >
+	<mx:Script>
+		<![CDATA[
+			import conf.Constants;
+			import es.guasax.container.GuasaxContainer;
+			import es.guasax.samples.helloworld.bo.HelloWorldBO;
+			import mx.controls.Alert;
+			// iniciamos el framework		   
+			public function init():void{
+				 var helloWorldBO : HelloWorldBO;	
+				GuasaxContainer.getInstance().parseConfFile(xmlfile);
+			}
+			// invocamos la accion mediante guasax.
+			public function sayHello():void{
+				try{
+					var params:Array = null;
+					GuasaxContainer.getInstance().
+						executeAction(Constants.SAY_HELLO_ACTION, params);
+				}catch(error:Error){
+					Alert.show("An error occurred");
+				}
+			}
+		]]>
+	</mx:Script>
+<!-- Configuration file for guasax -->
+	<mx:XML id="xmlfile" format="e4x|xml"  
+			source="/conf/guasax-conf.xml" />		
+	<mx:Panel x="179" y="44" width="340" height="200"  
+		title="Hello World Guasax Sample" fontSize="10" 
+		horizontalAlign="center" verticalAlign="middle">
+		<mx:Button label="Say Hello! press me" click="sayHello()"/>
+	</mx:Panel>
+</mx:Application>
