@@ -106,7 +106,8 @@ package es.guasax.services
       								 methodName : String,
       								 params     : Array, 
       								 resultFunc : Function, 
-      								 faultFunc  : Function):void{
+      								 faultFunc  : Function,
+      								 objectResult : Object ):void{
       	 var service : AbstractService = getService(serviceName);
       	 
       	 var operation : Operation = mx.rpc.remoting.Operation(service[methodName]);
@@ -127,6 +128,7 @@ package es.guasax.services
       	 responseCallBack.setActionVO(GuasaxContainer.getInstance().getCurrentActionVO());
       	 responseCallBack.currentResultFuncion = resultFunc;
       	 responseCallBack.currentFaultFuncion  = faultFunc;
+      	 responseCallBack.objectResult         = objectResult;
       	 
       	 // Ejecutamos la operacion 
       	 var callObject : Object = operation.send();      	 
