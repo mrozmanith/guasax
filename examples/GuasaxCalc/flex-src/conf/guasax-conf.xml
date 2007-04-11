@@ -1,0 +1,10 @@
+<!--
+	author:      angel.blesa@gmail.com
+	date:        20/03/2007 
+	description: Calculator example
+-->
+<guasax version="0.9" description="Framework MVC para Flex 2">
+	<component id="calculator" className="es.guasax.samples.calculator.bo.CalculatorBO" enabled="true">
+		<action id="calculate"      method="calculate" />
+	</component>
+</guasax>

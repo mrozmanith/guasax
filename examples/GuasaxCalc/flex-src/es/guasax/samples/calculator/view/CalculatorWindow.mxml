@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
+	layout="absolute" width="336" height="230" title="Calculator" 
+	alpha="{model.alphaValue}">
+	
+	<mx:Script>
+	<![CDATA[
+		import conf.Constants;
+		import es.guasax.samples.calculator.vo.OperationVO;
+		import mx.controls.Alert;
+		import flash.utils.setTimeout;
+		import mx.core.IFlexDisplayObject;
+		import es.guasax.vo.ResponseActionVO;
+		import es.guasax.samples.calculator.model.ModelLocator;
+		import es.guasax.container.GuasaxContainer;
+		import mx.core.Application;
+		import mx.managers.PopUpManager;
+		
+		
+		public var guasaxContainer:GuasaxContainer = GuasaxContainer.getInstance();
+		
+		[Bindable]
+		public var model:ModelLocator = ModelLocator.getInstance();
+		
+		[Bindable]
+        public var operadoresArray       : Array = [ {label:"+", data:0},
+        											 {label:"-", data:1},
+        											 {label:"*", data:2},
+        											 {label:"/", data:3}
+        											 ];
+        [Bindable]											 
+        public var enabledLocal : Boolean  = guasaxContainer.isEnabledAction(Constants.CALCULATE_ACTION)
+        /**
+        *
+        */											 
+		public function calcular():void{
+			var operationVO:OperationVO = new OperationVO();
+			operationVO.operador  = operadorCmb.selectedLabel;
+			operationVO.operando1 = Number(operando1Txt.text);
+			operationVO.operando2 = Number(operando2Txt.text);
+			// -----------------------------
+			dispatchEvent(new CalculadoraEvent(operationVO));   
+			
+			         
+		}
+		
+        /**
+        * Calculamos la operacion y el resultado lo mostramos en esta vista a través del update metodo.
+        */											 
+		public function calcularAqui():void{
+		    var operationVO :OperationVO = new OperationVO();
+			operationVO.operador = operadorCmb.selectedLabel;
+			operationVO.operando1 = Number(operando1Txt.text);
+			operationVO.operando2 = Number(operando2Txt.text);
+			// -----------------------------
+			var response:ResponseActionVO  = guasaxContainer.executeActionWithView(
+											Constants.CALCULATE_ACTION,
+					   				    	[operationVO],
+					   				    	[this],
+					   				    	Constants.UPDATE_VIEW,
+					   				    	[null]);//pasamos la vista y el metodo de la vista que queremos invokar.	
+					   				    	
+					   				    	
+		}
+		
+		/**
+		*
+		*/		
+		public function cerrarWindow():void {
+			PopUpManager.removePopUp(this);
+		}
+		
+		/**
+		* Metodo llamado desde el manejador de 
+		*/		
+		public function updateView():void {
+			resultadoTxt.text = model.operationVO.result.toString();
+			glowcombo.target = resultadoTxt;
+			glowcombo.play();
+		}
+		
+	]]>
+	</mx:Script>
+
+	<mx:Sequence id="glowcombo">
+		<mx:Glow id="glow" duration="500" 
+	        alphaFrom="1.0" alphaTo="0.3" 
+	        blurXFrom="0.0" blurXTo="50.0" 
+	        blurYFrom="0.0" blurYTo="50.0" 
+	        color="0x00FF00"/>
+	    <mx:Glow id="unglow" duration="500" 
+	        alphaFrom="0.3" alphaTo="1.0" 
+	        blurXFrom="50.0" blurXTo="0.0" 
+	        blurYFrom="50.0" blurYTo="0.0" 
+	        color="0x0000FF"/>
+    </mx:Sequence>
+
+	<mx:VBox x="0" y="0" height="100%" width="100%">
+		<mx:Form width="100%" height="100%">
+			<mx:FormItem label="Op 1" width="100%">
+				<mx:TextInput id="operando1Txt" text="0" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Op 2" width="100%">
+				<mx:TextInput id="operando2Txt" text="0" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Operator" width="100%">
+				<mx:ComboBox id="operadorCmb" dataProvider="{operadoresArray}" selectedIndex="0" width="100%"></mx:ComboBox>
+			</mx:FormItem>
+			<mx:FormItem label="Result:" width="100%">
+				<mx:TextInput id="resultadoTxt"  width="100%"/>
+			</mx:FormItem>
+		</mx:Form>
+		<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center" height="34">
+			<mx:Button label="Calculate"      click="calcular()" />
+			<mx:Button label="Calculate here" click="calcularAqui()" enabled="{enabledLocal}"/>
+			<mx:Button label="Exit" click="PopUpManager.removePopUp(this)"/>
+		</mx:HBox>
+	</mx:VBox>
+	
+</mx:TitleWindow>

@@ -1,0 +1,27 @@
+ Application {
+	        paddingLeft:   10px;
+	        paddingRight:  10px;
+	        paddingTop:    50px;
+	        paddingBottom: 10px;
+	        horizontalAlign: "left";
+	        backgroundImage: Embed(source="../assets/red_1200.jpg");
+	        backgroundColor: #AAAACC;
+	    }
+	    Panel {
+	        paddingLeft:   10px;
+	        paddingRight:  10px;
+	        paddingTop:    50px;
+	        paddingBottom: 10px;
+	        horizontalAlign: "left";
+	        backgroundImage: Embed(source="../assets/green_1200.jpg");
+	        backgroundColor: #AAAACC;
+	    }
+		TitleWindow {
+	        paddingLeft:   10px;
+	        paddingRight:  10px;
+	        paddingTop:    10px;
+	        paddingBottom: 10px;
+	        horizontalAlign: "left";
+	        backgroundImage: Embed(source="../assets/dark_blue_1024.jpg");
+	        backgroundColor: #AAAACC;
+	    }	    
