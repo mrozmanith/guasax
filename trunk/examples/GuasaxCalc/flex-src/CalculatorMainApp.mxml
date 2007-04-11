@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
+		 		xmlns:core="es.masterd.internet.core.*"
+		 		horizontalAlign="center"
+		 		creationComplete="init()">
+	
+	<!-- Style definition for the entire application. -->
+	<mx:Style source="calcstyle.css" />
+	
+	<mx:Script>
+		<![CDATA[
+			import conf.Constants;
+			import es.guasax.samples.calculator.view.CalculatorWindow;
+			import es.guasax.samples.calculator.bo.CalculatorBO;
+			import es.guasax.samples.calculator.exceptions.CalculatorError;
+			import es.guasax.samples.calculator.vo.OperationVO;
+			import es.guasax.view.ViewLocator;
+			import mx.core.IFlexDisplayObject;
+			import es.guasax.vo.ResponseActionVO;
+			import es.guasax.samples.calculator.model.ModelLocator;
+			import es.guasax.vo.GuasaxConfigurationVO;
+
+			import es.guasax.container.GuasaxContainer;
+			import es.guasax.parser.XMLConfParser;
+			import es.guasax.samples.calculator.view.CalculadoraEvent;
+			     
+			import mx.rpc.xml.XMLDecoder;
+			import mx.controls.Alert;
+			import mx.managers.PopUpManager;
+			
+			import flash.display.BlendMode;
+			
+			[Bindable]
+			public var model:ModelLocator = ModelLocator.getInstance();
+			
+			public var contador: Number = 1;
+			
+			public var xmlConfParser: XMLConfParser = XMLConfParser.getInstance();
+			
+			public var guasaxContainer:GuasaxContainer = GuasaxContainer.getInstance();
+			/**
+			* Iniciamos el container 
+			*/
+			public function init():void{
+				// Nota: Es necesario crear al menos una variable para que el copmpiler incluya la clase de la misma, 
+				//para que en tiempo de ejecucion  se pueda instanciar la clase e invocar un metodo.
+				var calculadoraBO     :CalculatorBO; 
+				var calculatorWindow  :CalculatorWindow; 
+				/**
+				* Parseamos el fichero de configuracion para el container con la ayuda de la clase 
+				* XMLConfParser
+				*/
+				GuasaxContainer.getInstance().parseConfFile(xmlfile);
+				// --- seteamos el userRole actual del usuario en el container --------
+				GuasaxContainer.getInstance().setUserRole("admin");
+				
+			}
+			/**
+			* Lanza la accioon de 'operar', con el parametro OperacionVO
+			*/
+			public function operar():void{
+			    var operationVO:OperationVO = new OperationVO();
+			    operationVO.operando1 = Number(op1Txt.text);
+			    operationVO.operando2 = Number(op2Txt.text);
+			    operationVO.operador = "+";
+			    
+				var response:ResponseActionVO  = guasaxContainer.executeAction(Constants.CALCULATE_ACTION,
+																			   [operationVO]);
+			}
+			
+			/*******************************************************/
+			public function nuevaCalculadora():void{
+				 var calculatorWindow:CalculatorWindow = new CalculatorWindow();	
+				 
+				 ViewLocator.getInstance().register("CALCULADORA"+(contador++),calculatorWindow);
+				 
+		         calculatorWindow.addEventListener("calculator", calculatorWindowHandler); 
+		   		 PopUpManager.addPopUp(calculatorWindow, this, false); //true -->Modal, false --> No Modal
+		   		 PopUpManager.centerPopUp(calculatorWindow); 
+		   		   
+			}
+			
+		    /**   
+		    * Handler para la ventana de creacion de un grupo de invitados
+		    */
+		     public function calculatorWindowHandler(event:CalculadoraEvent):void
+		    {
+		        //var calculadoraEvent:CalculadoraEvent = new CalculadoraEvent();
+		    	var operationVO:OperationVO = event.operationVO;
+		    	var calculatorWindow:Object = event.target;
+		    	/****/
+		    	var response:ResponseActionVO  = guasaxContainer.executeAction(Constants.CALCULATE_ACTION,
+		    																   [operationVO]);
+				// cerramos la ventana	   				    
+				PopUpManager.removePopUp(IFlexDisplayObject(calculatorWindow));					   				    
+		    }	
+		    
+		/**
+		* Metodo llamado desde el manejador de 
+		*/		
+		public function updateView(operationVO:OperationVO):void {
+			resultadoLabel.text = operationVO.result.toString();	
+			glow.target = resultadoLabel;
+			glow.play();
+			Alert.show("Operacion realizada");
+			//resultadoTxt.enabled = false;	
+		}		
+			
+		]]>
+	</mx:Script>	
+	
+	<!-- Referencia a nuestro fichero de confocguracion de nuestros compoenente -->
+	<mx:XML id="xmlfile" format="e4x|xml"  source="/conf/guasax-conf.xml" />	
+	
+	<mx:Fade id="glow" duration="2000" alphaTo="0.0" alphaFrom="1.0"/>
+	<mx:HBox width="600">
+		<mx:Label text="Guasax Simple Calculator Example" fontWeight="bold" fontSize="14" fontFamily="Verdana" textAlign="center" color="#ffffff"/>
+	</mx:HBox>
+	
+    <mx:Panel title="Main Application" width="600" height="100%" 
+    	paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10">
+		<mx:HBox width="100%">
+			<mx:Button label="Do operation" click="operar()"/>
+			<mx:Label text="OP1:"/>
+			<mx:TextInput width="81" id="op1Txt" text="2"/>
+			<mx:Label text="OP2:"/>
+			<mx:TextInput width="91" id="op2Txt" text="3"/>
+			<mx:Label text="resultado:"/>
+			<mx:TextInput text="{model.operationVO.result}" id="resultadoLabel" width="100%"/> 
+		</mx:HBox>
+		<mx:Button label="New calculator" click="nuevaCalculadora()"/>
+		<mx:HSlider minimum="0.0" maximum="1.0" 
+			snapInterval="0.01" allowTrackClick="true" 
+			value="0.5" liveDragging="true"
+			enabled="true" id="slider" width="245" 
+			change="model.alphaValue = slider.value;"/>
+		<mx:HBox width="100%">
+			<mx:Label text="Slider value:"/>
+			<mx:TextInput text="{slider.value}"/>
+		</mx:HBox>
+    </mx:Panel>
+	
+</mx:Application>
