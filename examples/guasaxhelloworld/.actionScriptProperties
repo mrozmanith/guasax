@@ -10,13 +10,12 @@
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/rpc.swc"/>
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/charts.swc" sourcepath="${FRAMEWORKS}/source"/>
 <libraryPathEntry kind="1" linkType="1" path="${FRAMEWORKS}/locale/{locale}"/>
-<libraryPathEntry kind="3" linkType="1" path="D:\PROYECTOS\GUASAX_Framework\GuasaxLibrary\bin\GuasaxLibrary.swc" sourcepath="/GuasaxFrameworkLibrary"/>
+<libraryPathEntry kind="3" linkType="1" path="D:\PROYECTOS\GUASAX_Framework\GuasaxHelloWorld\swclib\GuasaxLibrary-v.0.9a.swc"/>
 </libraryPath>
 <sourceAttachmentPath>
 <sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/flex.swc" sourcepath="${FRAMEWORKS}/source"/>
 <sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/framework.swc" sourcepath="${FRAMEWORKS}/source"/>
 <sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/charts.swc" sourcepath="${FRAMEWORKS}/source"/>
-<sourceAttachmentPathEntry kind="3" linkType="1" path="D:\PROYECTOS\GUASAX_Framework\GuasaxLibrary\bin\GuasaxLibrary.swc" sourcepath="/GuasaxFrameworkLibrary"/>
 </sourceAttachmentPath>
 </compiler>
 <applications>
