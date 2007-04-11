@@ -24,8 +24,7 @@
 		]]>
 	</mx:Script>
 <!-- Configuration file for guasax -->
-	<mx:XML id="xmlfile" format="e4x|xml"  
-			source="/conf/guasax-conf.xml" />		
+	<mx:XML id="xmlfile" format="e4x|xml" source="/conf/guasax-conf.xml" />		
 	<mx:Panel x="179" y="44" width="340" height="200"  
 		title="Hello World Guasax Sample" fontSize="10" 
 		horizontalAlign="center" verticalAlign="middle">
