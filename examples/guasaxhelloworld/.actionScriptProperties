@@ -3,19 +3,20 @@
 <compiler additionalCompilerArguments="-source-path+=../locale/{locale} -locale=en_US" copyDependentFiles="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="flex-src" strict="true" warn="true">
 <compilerSourcePath/>
 <libraryPath>
-<libraryPathEntry kind="3" linkType="2" path="${FRAMEWORKS}/libs/playerglobal.swc"/>
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/utilities.swc"/>
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/flex.swc" sourcepath="${FRAMEWORKS}/source"/>
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/framework.swc" sourcepath="${FRAMEWORKS}/source"/>
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/rpc.swc"/>
 <libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/charts.swc" sourcepath="${FRAMEWORKS}/source"/>
 <libraryPathEntry kind="1" linkType="1" path="${FRAMEWORKS}/locale/{locale}"/>
-<libraryPathEntry kind="3" linkType="1" path="D:\PROYECTOS\GUASAX_Framework\GuasaxHelloWorld\swclib\GuasaxLibrary-v.0.9a.swc"/>
+<libraryPathEntry kind="3" linkType="1" path="D:\PROYECTOS\GUASAX_Framework\GuasaxLibrary\bin\GuasaxLibrary.swc" sourcepath="/GuasaxLibrary/src"/>
+<libraryPathEntry kind="3" linkType="1" path="${FRAMEWORKS}\libs\playerglobal.swc"/>
 </libraryPath>
 <sourceAttachmentPath>
 <sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/flex.swc" sourcepath="${FRAMEWORKS}/source"/>
 <sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/framework.swc" sourcepath="${FRAMEWORKS}/source"/>
 <sourceAttachmentPathEntry kind="3" linkType="1" path="${FRAMEWORKS}/libs/charts.swc" sourcepath="${FRAMEWORKS}/source"/>
+<sourceAttachmentPathEntry kind="3" linkType="1" path="D:\PROYECTOS\GUASAX_Framework\GuasaxLibrary\bin\GuasaxLibrary.swc" sourcepath="/GuasaxLibrary/src"/>
 </sourceAttachmentPath>
 </compiler>
 <applications>
