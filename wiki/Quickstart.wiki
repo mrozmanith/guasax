@@ -8,7 +8,7 @@ A more complete quickstart is coming soon in [http://www.guasax.com]
 
  # Create a new Flex project in Flex Builder.
  # Create a lib directory in your Flex project
- # Copy guasaxlib-v.0.9a.swc to lib directory.
+ # Copy GuasaxLibrary-v.0.9a.swc to lib directory.
  # On the project name in the project navigator, right click and select Properties.
  # On the left, select "Flex Build Path".
  # Select "Library path" tab.
@@ -27,7 +27,6 @@ A more complete quickstart is coming soon in [http://www.guasax.com]
    -source-path+=../locale/{locale} -locale=en_US
 
 *Note* that this path is relative to source code path
-
 
 
 
