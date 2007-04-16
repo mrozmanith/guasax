@@ -35,6 +35,7 @@ package es.guasax.view
    import es.guasax.messages.GuasaxError;
    import es.guasax.messages.GuasaxMessageCodes;
    import mx.core.IFlexDisplayObject;
+   import flash.display.DisplayObject;
    /**
     * 
     */
@@ -101,7 +102,7 @@ package es.guasax.view
        * Return the view object by name
        * @param viewName Name for the view to be returned
        */
-      public function getViewObject( viewName : String ) : Object
+      public function getViewObject( viewName : String ) : DisplayObject
       {
          if ( viewObjects[ viewName ] == undefined )
          {
@@ -109,7 +110,7 @@ package es.guasax.view
                GuasaxMessageCodes.VIEW_NOT_FOUND_EXCEPTION, viewName );
          }
          
-         return viewObjects[ viewName ];
+         return viewObjects[ viewName ] as DisplayObject;
       }
    }
 }
