@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <actionScriptProperties mainApplicationPath="CalculatorMainApp.mxml" version="1">
-<compiler additionalCompilerArguments="-source-path+=../locale/{locale} -locale=en_US" copyDependentFiles="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.0" htmlPlayerVersionCheck="true" outputFolderPath="output" sourceFolderPath="flex-src" strict="true" warn="true">
+<compiler additionalCompilerArguments="-source-path+=../locale/{locale} -locale=en_US" copyDependentFiles="true" generateAccessible="false" htmlExpressInstall="true" htmlGenerate="true" htmlHistoryManagement="true" htmlPlayerVersion="9.0.0" htmlPlayerVersionCheck="true" outputFolderPath="bin" sourceFolderPath="flex-src" strict="true" warn="true">
 <compilerSourcePath/>
 <libraryPath>
 <libraryPathEntry kind="3" linkType="2" path="${FRAMEWORKS}/libs/playerglobal.swc"/>
