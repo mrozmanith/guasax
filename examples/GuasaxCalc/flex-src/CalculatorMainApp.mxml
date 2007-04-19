@@ -2,7 +2,8 @@
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" 
 		 		xmlns:core="es.masterd.internet.core.*"
 		 		horizontalAlign="center"
-		 		creationComplete="init()">
+		 		creationComplete="init()" 
+		 		viewSourceURL="srcview/index.html">
 	
 	<!-- Style definition for the entire application. -->
 	<mx:Style source="calcstyle.css" />
