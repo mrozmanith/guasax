@@ -1,4 +1,5 @@
 #summary Quick guide to get started using guasax framework .
+#labels Featured
 
 = Introduction =
 
@@ -28,7 +29,6 @@ For a more detailed introduction to guasax we have prepared this presentation [h
    -source-path+=../locale/{locale} -locale=en_US
 
 *Note* that this path is relative to source code path
-
 
 
 
