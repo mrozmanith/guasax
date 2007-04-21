@@ -40,7 +40,7 @@ package es.guasax.parser
 	public class XMLConfParser
 	{
 		// Singleton 
-		private static var instance : XMLConfParser;
+		private static var instance    : XMLConfParser;
       
         private const PREINTERCEPTORS  : String = "preinterceptors";
         private const INTERCEPTOR      : String = "interceptor";
@@ -56,7 +56,7 @@ package es.guasax.parser
            return instance;
         }
       
-        //Constructor should be private but current AS3.0 does not allow it yet (?)...
+        //Constructor should be private 
         public function XMLConfParser() 
         {	
            if ( instance != null )
