@@ -35,10 +35,10 @@ package es.guasax.vo
 		private var viewMethodName  : String;  // Method's name of view which has been called after 
 		private var hasParameters   : Boolean; // that variable say us if the method to execute has parameters
 		
-		// El obj devuelto por el resultado de la ejcucion de esta action
+		// Return object for action execution
 		private var executionResult: Object;
 		
-		// Los parametros pasados a la vista desde el execute action
+		// View params for view method
 		private var viewParams: Array;
 		
 		// Si es true, entonces el container espera a tener la respuesta del metodo remoto para invocar a 
@@ -167,9 +167,5 @@ package es.guasax.vo
 		public function getViewParams():Array{
 			return this.viewParams;
 		}	
-		
-		
-						
-		
 	}
 }

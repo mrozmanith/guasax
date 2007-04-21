@@ -29,7 +29,6 @@ package es.guasax.services
 	
 	public class ResponseCallBack
 	{
-		//public  var id       : Number; // identificador del obj, para almacenar 
 		private var actionVO : ActionVO;
 		
 		public var currentResultFuncion : Function;
@@ -39,9 +38,7 @@ package es.guasax.services
 		 * 
 		 */
 		public function onResult( event : * = null ) : void {
-			//setTimeout(currentResultFuncion,0,event);
 			currentResultFuncion.apply(objectResult, [event]);
-
 			// comprobamos si tenemos que lanzar el updateView desde aqui,al ser una accion que 
 			// ha sido ejecutada indicando que la vista se ejecute despues de que llegue la respuesta del servicio			
 			if(actionVO.isExecuteViewUpdateAfterRemoteService()){
@@ -54,11 +51,9 @@ package es.guasax.services
 		 * 
 		 */
 		public function onFault( event : * = null ) : void {
-			//setTimeout(currentFaultFuncion,0,event);
+			currentFaultFuncion.apply(objectResult, [event]);
 			// comprobamos si tenemos que lanzar el updateView desde aqui,al ser una accion que 
 			// ha sido ejecutada indicando que la vista se ejecute despues de que llegue la respuesta del servicio		
-			currentFaultFuncion.apply(objectResult, [event]);
-							
 			if(actionVO.isExecuteViewUpdateAfterRemoteService()){
 				GuasaxContainer.getInstance().executeViewUpdate(actionVO.getViewObjectArray(),			
 																actionVO.getViewMethodName(),
