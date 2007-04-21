@@ -2,7 +2,7 @@
 
 = Introduction =
 
-A more complete quickstart is coming soon in [http://www.guasax.com]
+A more complete quickstart is coming soon in [http://www.guasax.com].
 For a more detailed introduction to guasax we have prepared this presentation [http://guasax.files.wordpress.com/2007/04/introduction_to_guasax_framework_en_release_11-04-2007.ppt]
 
 = Adding guasax library =
@@ -28,7 +28,6 @@ For a more detailed introduction to guasax we have prepared this presentation [h
    -source-path+=../locale/{locale} -locale=en_US
 
 *Note* that this path is relative to source code path
-
 
 
 
