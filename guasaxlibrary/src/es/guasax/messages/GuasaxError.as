@@ -21,7 +21,7 @@
  */
  
 /**
- * Original idea from Cairngorm, thanks a lot of. 
+ * Original idea from Cairngorm. 
  */
 package es.guasax.messages
 {

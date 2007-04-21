@@ -25,8 +25,6 @@ INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
 CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
-
-@ignore
 */
 
 
@@ -119,7 +117,7 @@ package es.guasax.services
       	 var responseCallBack : ResponseCallBack = new ResponseCallBack();
       	 
       	 // TODO - determinar si es necesario clonar o no 
-      	 //-------- clonamos la aciton y la pasamos al responseCallBackObjct ------------------
+      	 //-------- clonamos la action y la pasamos al responseCallBackObjct ------------------
 		 /*    	 
       	 registerClassAlias("es.guasax.vo.ActionVO",ActionVO);
 		 var actionVOCopy : ActionVO = GuasaxUtil.clone(GuasaxContainer.getInstance().getCurrentActionVO());
