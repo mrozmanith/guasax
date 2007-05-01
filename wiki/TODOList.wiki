@@ -1,7 +1,6 @@
-#summary One-sentence summary of this page.
+#summary A list of wishes
 
 = Introduction =
 
 List of wishes and TODO List
-
 
