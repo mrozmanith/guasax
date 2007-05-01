@@ -1,6 +1,5 @@
-#summary A list of wishes
+#summary A list of things to do
 
 = Introduction =
 
 List of wishes and TODO List
-
