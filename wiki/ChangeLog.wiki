@@ -1,13 +1,14 @@
 #summary A description of the changes between each release.
 
-= Introduction =
+= Current production release 0.9 alpha =
 
-Add your content here.
+= Next release 0.9.1a =
+
+  * Change the way for load xml confguration file. Now this is asynchronous , and you receive a callBack event when load configuration is complete.
+  * Added global-interceptors
+  * Fixed wrong error messages in GuasaxContainer
+  * In this release you will be able for divided xml configuration file in several files, with element "<include file="another-file-conf.xml" />
 
 
-= Details =
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+= 0.9a =
+  * Initial release
