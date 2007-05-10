@@ -10,6 +10,7 @@
 	
 	<mx:Script>
 		<![CDATA[
+			import es.guasax.samples.calculator.view.CalculatorEvent;
 			import conf.Constants;
 			import es.guasax.samples.calculator.view.CalculatorWindow;
 			import es.guasax.samples.calculator.bo.CalculatorBO;
@@ -20,10 +21,8 @@
 			import es.guasax.vo.ResponseActionVO;
 			import es.guasax.samples.calculator.model.ModelLocator;
 			import es.guasax.vo.GuasaxConfigurationVO;
-
 			import es.guasax.container.GuasaxContainer;
 			import es.guasax.parser.XMLConfParser;
-			import es.guasax.samples.calculator.view.CalculadoraEvent;
 			     
 			import mx.rpc.xml.XMLDecoder;
 			import mx.controls.Alert;
@@ -87,7 +86,7 @@
 		    /**   
 		    * Handler para la ventana de creacion de un grupo de invitados
 		    */
-		     public function calculatorWindowHandler(event:CalculadoraEvent):void
+		     public function calculatorWindowHandler(event:CalculatorEvent):void
 		    {
 		        //var calculadoraEvent:CalculadoraEvent = new CalculadoraEvent();
 		    	var operationVO:OperationVO = event.operationVO;
