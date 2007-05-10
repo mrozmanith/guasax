@@ -14,18 +14,20 @@ package es.guasax.samples.calculator.bo
 
 		public function calculate(operationVO:OperationVO):OperationVO {
 			try{
-				var resultado: Number;
+				var result: Number;
 				if(operationVO.operador == "+"){
-					resultado = operationVO.operando1 + operationVO.operando2;
+					result = operationVO.operando1 + operationVO.operando2;
 				}else if(operationVO.operador == "-"){				
-					resultado = operationVO.operando1 - operationVO.operando2;
+					result = operationVO.operando1 - operationVO.operando2;
 				}else if(operationVO.operador == "*"){
-					resultado = operationVO.operando1 * operationVO.operando2;
+					result = operationVO.operando1 * operationVO.operando2;
 				}else if(operationVO.operador == "/"){
-					resultado = operationVO.operando1 / operationVO.operando2;
+					result = operationVO.operando1 / operationVO.operando2;
 				} 
 				
-				operationVO.result = resultado;
+				operationVO.result = result;
+				
+				// actualizamos el modelo
 				model.operationVO = operationVO;
 			}catch(error:CalculatorError){
 				Alert.show("Se ha producido un error:"+error.message);
