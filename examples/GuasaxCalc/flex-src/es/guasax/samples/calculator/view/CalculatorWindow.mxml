@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
 	layout="absolute" width="336" height="230" title="Calculator" 
-	alpha="{model.alphaValue}">
+	>
 	
 	<mx:Script>
 	<![CDATA[
@@ -28,8 +28,6 @@
         											 {label:"*", data:2},
         											 {label:"/", data:3}
         											 ];
-        [Bindable]											 
-        public var enabledLocal : Boolean  = guasaxContainer.isEnabledAction(Constants.CALCULATE_ACTION)
         /**
         *
         */											 
@@ -112,7 +110,7 @@
 		</mx:Form>
 		<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center" height="34">
 			<mx:Button label="Calculate"      click="calcular()" />
-			<mx:Button label="Calculate here" click="calcularAqui()" enabled="{enabledLocal}"/>
+			<mx:Button label="Calculate here" click="calcularAqui()" />
 			<mx:Button label="Exit" click="PopUpManager.removePopUp(this)"/>
 		</mx:HBox>
 	</mx:VBox>
