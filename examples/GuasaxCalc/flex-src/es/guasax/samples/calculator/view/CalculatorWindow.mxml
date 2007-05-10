@@ -31,13 +31,13 @@
         /**
         *
         */											 
-		public function calcular():void{
+		public function calculate():void{
 			var operationVO:OperationVO = new OperationVO();
 			operationVO.operador  = operadorCmb.selectedLabel;
 			operationVO.operando1 = Number(operando1Txt.text);
 			operationVO.operando2 = Number(operando2Txt.text);
 			// -----------------------------
-			dispatchEvent(new CalculadoraEvent(operationVO));   
+			dispatchEvent(new CalculatorEvent(operationVO));   
 			
 			         
 		}
@@ -45,7 +45,7 @@
         /**
         * Calculamos la operacion y el resultado lo mostramos en esta vista a través del update metodo.
         */											 
-		public function calcularAqui():void{
+		public function calculateHere():void{
 		    var operationVO :OperationVO = new OperationVO();
 			operationVO.operador = operadorCmb.selectedLabel;
 			operationVO.operando1 = Number(operando1Txt.text);
@@ -109,8 +109,8 @@
 			</mx:FormItem>
 		</mx:Form>
 		<mx:HBox width="100%" verticalAlign="middle" horizontalAlign="center" height="34">
-			<mx:Button label="Calculate"      click="calcular()" />
-			<mx:Button label="Calculate here" click="calcularAqui()" />
+			<mx:Button label="Calculate"      click="calculate()" />
+			<mx:Button label="Calculate here" click="calculateHere()" />
 			<mx:Button label="Exit" click="PopUpManager.removePopUp(this)"/>
 		</mx:HBox>
 	</mx:VBox>
