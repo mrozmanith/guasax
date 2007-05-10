@@ -27,7 +27,7 @@ package es.guasax.samples.calculator.bo
 				
 				operationVO.result = result;
 				
-				// actualizamos el modelo
+				// update model
 				model.operationVO = operationVO;
 			}catch(error:CalculatorError){
 				Alert.show("Se ha producido un error:"+error.message);

@@ -4,12 +4,12 @@ package es.guasax.samples.calculator.view
     import es.guasax.samples.calculator.vo.OperationVO;
    
     
-    public class CalculadoraEvent extends flash.events.Event 
+    public class CalculatorEvent extends flash.events.Event 
     {
 
         public var operationVO : OperationVO; 
 
-        public function CalculadoraEvent(_operationVO:OperationVO) 
+        public function CalculatorEvent(_operationVO:OperationVO) 
         {
             super("calculator");
             operationVO = _operationVO;
