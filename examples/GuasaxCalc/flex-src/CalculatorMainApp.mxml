@@ -22,20 +22,15 @@
 			import es.guasax.samples.calculator.model.ModelLocator;
 			import es.guasax.vo.GuasaxConfigurationVO;
 			import es.guasax.container.GuasaxContainer;
-			import es.guasax.parser.XMLConfParser;
 			     
-			import mx.rpc.xml.XMLDecoder;
 			import mx.controls.Alert;
 			import mx.managers.PopUpManager;
 			
-			import flash.display.BlendMode;
 			
 			[Bindable]
 			public var model:ModelLocator = ModelLocator.getInstance();
 			
 			public var contador: Number = 1;
-			
-			public var xmlConfParser: XMLConfParser = XMLConfParser.getInstance();
 			
 			public var guasaxContainer:GuasaxContainer = GuasaxContainer.getInstance();
 			
@@ -74,8 +69,8 @@
 			/*******************************************************/
 			public function nuevaCalculadora():void{
 				 var calculatorWindow:CalculatorWindow = new CalculatorWindow();	
-				 
-				 ViewLocator.getInstance().register("CALCULADORA"+(contador++),calculatorWindow);
+				 calculatorWindow.calculatorName = "CALCULADORA"+(contador++);				 
+				 ViewLocator.getInstance().register(calculatorWindow.calculatorName,calculatorWindow);
 				 
 		         calculatorWindow.addEventListener("calculator", calculatorWindowHandler); 
 		   		 PopUpManager.addPopUp(calculatorWindow, this, false); //true -->Modal, false --> No Modal

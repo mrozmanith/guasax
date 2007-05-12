@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <mx:TitleWindow xmlns:mx="http://www.adobe.com/2006/mxml" 
-	layout="absolute" width="336" height="230" title="Calculator" 
-	>
+	layout="absolute" width="336" height="230"  
+	title="{calculatorName}">
 	
 	<mx:Script>
 	<![CDATA[
@@ -18,10 +18,10 @@
 		
 		
 		public var guasaxContainer:GuasaxContainer = GuasaxContainer.getInstance();
-		
+		[Bindable]
+		public var calculatorName:String;
 		[Bindable]
 		public var model:ModelLocator = ModelLocator.getInstance();
-		
 		[Bindable]
         public var operadoresArray       : Array = [ {label:"+", data:0},
         											 {label:"-", data:1},
@@ -29,7 +29,7 @@
         											 {label:"/", data:3}
         											 ];
         /**
-        *
+        * Llevamos a cabo la operación y cerramos la ventana
         */											 
 		public function calculate():void{
 			var operationVO:OperationVO = new OperationVO();
@@ -38,12 +38,11 @@
 			operationVO.operando2 = Number(operando2Txt.text);
 			// -----------------------------
 			dispatchEvent(new CalculatorEvent(operationVO));   
-			
-			         
 		}
 		
         /**
-        * Calculamos la operacion y el resultado lo mostramos en esta vista a través del update metodo.
+        * Calculamos la operacion y el resultado lo mostramos en esta vista 
+        * a través del update metodo.
         */											 
 		public function calculateHere():void{
 		    var operationVO :OperationVO = new OperationVO();
@@ -57,15 +56,6 @@
 					   				    	[this],
 					   				    	Constants.UPDATE_VIEW,
 					   				    	[null]);//pasamos la vista y el metodo de la vista que queremos invokar.	
-					   				    	
-					   				    	
-		}
-		
-		/**
-		*
-		*/		
-		public function cerrarWindow():void {
-			PopUpManager.removePopUp(this);
 		}
 		
 		/**
