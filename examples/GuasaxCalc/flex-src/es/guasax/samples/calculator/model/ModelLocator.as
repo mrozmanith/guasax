@@ -28,8 +28,5 @@ package es.guasax.samples.calculator.model
       // ---------------------------------------------------------------
       [Bindable]
   	  public var operationVO  :OperationVO;
-  	  
-  	  
-  		  
 	}
 }
