@@ -14,6 +14,5 @@ package es.guasax.samples.calculator.view
             super("calculator");
             operationVO = _operationVO;
         }
-
     }
 }
