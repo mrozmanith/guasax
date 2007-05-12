@@ -27,7 +27,7 @@ package es.guasax.vo
 	public class ComponentVO
 	{
 		// identificador del compoenente 
-		private var id         : String;
+		public var id         : String;
 		// clase de negocio (BO) del componente
 		private var className  : String;
 		// Instancia en obj  del componente
@@ -39,6 +39,10 @@ package es.guasax.vo
 		private var enabled    : Boolean = true;
 		
 		private var roles      : Array   = ["*"]; //por defecto todos los roles
+		
+		// Propiedades que se cargan en el componente en en fichero de descripción del mismo.
+		// Ej: <property key="NUMERO_INTENTOS" value="3"/>	
+		private var properties : Dictionary = new Dictionary();
 		
 		// -------- GETTER and SETTER ---------------
 		public function setId(id:String):void{
@@ -81,7 +85,22 @@ package es.guasax.vo
 		}
 		public function getRoles():Array{
 			return this.roles;
-		}								
+		}	
+// ----------------------------------------
+		public function setProperties(properties:Dictionary):void{
+			this.properties = properties;
+		}
+		public function getProperties():Dictionary{
+			return this.properties;
+		}		
+// ----------------------------------------
+		public function getProperty( key:String) : Object {
+			return  this.properties[key];			
+		}						
+		public function addProperty( key:String, value:Object) : void {
+			this.properties[key] = value;			
+		}						
+							
 
 	}
 }
