@@ -31,7 +31,7 @@ package es.guasax.vo
 		// descripcion de la version
 		private var description : String;
 		// conjunto de componentes 
-		private var components  : Dictionary;
+		private var components  : Dictionary = new Dictionary();
 		
 		// ---------- GETTER and SETTER ---------------
 		public function setVersion(version:String):void{
