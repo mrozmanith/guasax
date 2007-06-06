@@ -195,9 +195,10 @@ package es.guasax.container
   	    * De esta manera se pueden reutilizar mucho mas los metodos de updateView, al no estar marcados por 
   	    * la recepción de unos determinados parametros.
 		*/
-		public function executeViewUpdate(viewObjectArray:Array,viewMethodName:String,params:Object):void{
+		public function executeViewUpdate(viewObjectArray:Array,viewMethodName:String,params:Array):void{
 			for each (var viewObject:Object in viewObjectArray) {
-				var viewParams : Array = [params];
+//				var viewParams : Array = [params];
+				var viewParams : Array = params;
 				var classInfo:XML = describeType(viewObject);
 				// Listamos los metodos de la clase.
 				for each (var m:XML in classInfo.method) {

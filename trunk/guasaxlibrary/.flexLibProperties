@@ -1,20 +1,20 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <flexLibProperties version="1">
-<includeClasses>
-<classEntry path="es.guasax.container.GuasaxContainer"/>
-<classEntry path="es.guasax.messages.GuasaxError"/>
-<classEntry path="es.guasax.messages.GuasaxMessageCodes"/>
-<classEntry path="es.guasax.parser.XMLConfParser"/>
-<classEntry path="es.guasax.services.IServiceLocator"/>
-<classEntry path="es.guasax.services.ResponseCallBack"/>
-<classEntry path="es.guasax.services.ServiceLocator"/>
-<classEntry path="es.guasax.util.GuasaxUtil"/>
-<classEntry path="es.guasax.view.ViewLocator"/>
-<classEntry path="es.guasax.vo.ActionVO"/>
-<classEntry path="es.guasax.vo.ComponentVO"/>
-<classEntry path="es.guasax.vo.GuasaxConfigurationVO"/>
-<classEntry path="es.guasax.vo.ResponseActionVO"/>
-</includeClasses>
-<includeResources/>
-<namespaceManifests/>
+  <includeClasses>
+    <classEntry path="es.guasax.container.GuasaxContainer"/>
+    <classEntry path="es.guasax.messages.GuasaxError"/>
+    <classEntry path="es.guasax.messages.GuasaxMessageCodes"/>
+    <classEntry path="es.guasax.parser.XMLConfParser"/>
+    <classEntry path="es.guasax.services.IServiceLocator"/>
+    <classEntry path="es.guasax.services.ResponseCallBack"/>
+    <classEntry path="es.guasax.services.ServiceLocator"/>
+    <classEntry path="es.guasax.util.GuasaxUtil"/>
+    <classEntry path="es.guasax.view.ViewLocator"/>
+    <classEntry path="es.guasax.vo.ActionVO"/>
+    <classEntry path="es.guasax.vo.ComponentVO"/>
+    <classEntry path="es.guasax.vo.GuasaxConfigurationVO"/>
+    <classEntry path="es.guasax.vo.ResponseActionVO"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
 </flexLibProperties>
