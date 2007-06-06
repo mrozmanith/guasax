@@ -37,7 +37,7 @@ package es.guasax.services
    
    import flash.utils.describeType;
    
-   import mx.data.DataService;
+  // import mx.data.DataService;
    import mx.messaging.Consumer;
    import mx.messaging.MessageAgent;
    import mx.messaging.Producer;
@@ -96,9 +96,11 @@ package es.guasax.services
       }
       
  	 /**
-	  * Ejecuta el metodo (methodName) servicio remoteo(serviceName) con los params.
+	  * Ejecuta el metodo (methodName) servicio remoto(serviceName) con los params.
 	  * Se setean las dos funciones de handler que se pasan para poder invocarlas en cuanto nos lleve la 
-	  * respuesta de este metodo que invocamos desde aqui.
+	  * respuesta de este metodo que invocamos desde aqui, se pasa tambien el objectResult, 
+	  * objeto del cual se invocan las funciones resultFunc y faultFunc, en la modo de ejecucion
+	  * afterService
 	  */
       public function executeService(serviceName: String,
       								 methodName : String,
@@ -116,13 +118,6 @@ package es.guasax.services
       	 // preparamos un responseCallBack para almacenar esta ejecucion de operacion remota
       	 var responseCallBack : ResponseCallBack = new ResponseCallBack();
       	 
-      	 // TODO - determinar si es necesario clonar o no 
-      	 //-------- clonamos la action y la pasamos al responseCallBackObjct ------------------
-		 /*    	 
-      	 registerClassAlias("es.guasax.vo.ActionVO",ActionVO);
-		 var actionVOCopy : ActionVO = GuasaxUtil.clone(GuasaxContainer.getInstance().getCurrentActionVO());
-      	 responseCallBack.setActionVO(actionVOCopy);
-		 */      	 
       	 responseCallBack.setActionVO(GuasaxContainer.getInstance().getCurrentActionVO());
       	 responseCallBack.currentResultFuncion = resultFunc;
       	 responseCallBack.currentFaultFuncion  = faultFunc;
@@ -197,16 +192,6 @@ package es.guasax.services
       {
          return Producer( getServiceForId( serviceId ) );
       }
-      
-      /**
-       * Return the DataService for the given service id.
-       * @param serviceId the service id.
-       * @return the RemoteObject.
-       */
-      public function getDataService( serviceId : String ) : DataService
-      {
-         return DataService( getServiceForId( serviceId ) );
-      }
          
       /**
        * Set the credentials for all registered services. Note that services
@@ -220,7 +205,6 @@ package es.guasax.services
          setServiceCredentials( username, password );
          setHTTPServiceCredentials( username, password );
          setMessageAgentCredentials( username, password );
-         setDataServicesCredentials( username, password );
       }
       
       /**
@@ -231,7 +215,6 @@ package es.guasax.services
           logoutFromServices();
           logoutFromHTTPServices();
           logoutFromMessageAgents();
-          logoutFromDataServices();
       }
       
       /**
@@ -306,24 +289,6 @@ package es.guasax.services
       }
       
       /**
-       * Set the user's credentials on all registered data services.
-       * @param username the username to set.
-       * @param password the password to set.
-       */
-      private function setDataServicesCredentials(
-         username : String,
-         password : String ) : void
-      {
-         var list : Array = getDataServices();
-         
-         for ( var i : uint = 0; i < list.length; i++ )
-         {
-            var service : DataService = list[ i ];
-            setCredentialsOnDataService( service, username, password );
-         }
-      }
-      
-      /**
        * Logs the user out of all registered services.
        */
       private function logoutFromServices() : void
@@ -361,20 +326,6 @@ package es.guasax.services
          for ( var i : uint = 0; i < list.length; i++ )
          {
             var service : MessageAgent = list[ i ];
-            service.logout();
-         }
-      }
-      
-      /**
-       * Logs the user out of all registered data services.
-       */
-      private function logoutFromDataServices() : void
-      {
-          var list : Array = getDataServices();
-         
-         for ( var i : uint = 0; i < list.length; i++ )
-         {
-            var service : DataService = list[ i ];
             service.logout();
          }
       }
@@ -420,22 +371,6 @@ package es.guasax.services
        */
       private function setCredentialsOnMessageAgent(
           service : MessageAgent,
-          username : String,
-          password : String ) : void
-      {
-          service.logout();
-          service.setCredentials( username, password );
-      }
-      
-      /**
-       * Sets the credentials on a data service. Logout is called first to
-       * clear any existing credentials.
-       * @param service the data service.
-       * @param username the username to set.
-       * @param password the password to set.
-       */
-      private function setCredentialsOnDataService(
-          service : DataService,
           username : String,
           password : String ) : void
       {
@@ -519,32 +454,6 @@ package es.guasax.services
          }
          
          return messageAgents;
-      }
-      
-      /**
-       * Return the configured data management services.
-       * @return the data management services.
-       */
-      private function getDataServices() : Array
-      {         
-         if ( dataServices == null )
-         {
-            dataServices = new Array();
-            
-            var accessors : XMLList = getAccessors();
-         
-            for ( var i : uint = 0; i < accessors.length(); i++ )
-            {
-               var name : String = accessors[ i ];
-               var obj : Object = this[ name ];
-               if ( obj is DataService )
-               {
-                  dataServices.push( obj );
-               }
-            }
-         }
-         
-         return dataServices;
       }
       
       /**

@@ -38,7 +38,7 @@ package es.guasax.services
 	 * 
 	 */
 
-   import mx.data.DataService;
+
    import mx.messaging.Consumer;
    import mx.messaging.MessageAgent;
    import mx.messaging.Producer;
@@ -83,13 +83,6 @@ package es.guasax.services
 		 * @return the RemoteObject.
 		 */
       function getProducer( destinationId : String ) : Producer;
-      
-		/**
-		 * Return the DataService for the given service id.
-		 * @param serviceId the service id.
-		 * @return the RemoteObject.
-		 */
-      function getDataService( destinationId : String ) : DataService;
       
 		/**
 		 * Set the credentials for all registered services. Note that services
