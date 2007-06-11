@@ -26,8 +26,15 @@ package es.guasax.vo
 	
 	public class ComponentVO
 	{
-		// identificador del compoenente 
-		public var id         : String;
+		// identificador del compoenente  , depreacted por "name"
+		public var  id          : String;
+		
+		// identificador del tipo compoenente 
+		public var  type          : String;
+		
+		// Nombre de este componente concreto. 
+		public var  name          : String;
+		
 		// clase de negocio (BO) del componente
 		private var className  : String;
 		// Instancia en obj  del componente
@@ -44,12 +51,26 @@ package es.guasax.vo
 		// Ej: <property key="NUMERO_INTENTOS" value="3"/>	
 		private var properties : Dictionary = new Dictionary();
 		
-		// -------- GETTER and SETTER ---------------
+	// -------- GETTER and SETTER ---------------
 		public function setId(id:String):void{
 			this.id = id;
 		}
 		public function getId():String{
 			return this.id;
+		}	
+
+		public function setType(type:String):void{
+			this.type = type;
+		}
+		public function getType():String{
+			return this.type;
+		}	
+		// ------------------------------------------
+		public function setName(name:String):void{
+			this.name = name;
+		}
+		public function getName():String{
+			return this.name;
 		}	
 		// ----------------------------------------
 		public function setClassName(className:String):void{

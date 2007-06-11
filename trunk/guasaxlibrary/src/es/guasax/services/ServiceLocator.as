@@ -30,33 +30,23 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package es.guasax.services
 {
-   /**
-   	* 
-    */
-  
+   import es.guasax.container.GuasaxContainer;
+   import es.guasax.messages.GuasaxError;
+   import es.guasax.messages.GuasaxMessageCodes;
+   import es.guasax.util.GuasaxUtil;
+   import es.guasax.vo.ActionVO;
    
+   import flash.net.registerClassAlias;
    import flash.utils.describeType;
+   import flash.utils.setTimeout;
    
-  // import mx.data.DataService;
-   import mx.messaging.Consumer;
-   import mx.messaging.MessageAgent;
-   import mx.messaging.Producer;
+   import mx.controls.Alert;
    import mx.rpc.AbstractInvoker;
    import mx.rpc.AbstractService;
    import mx.rpc.http.HTTPService;
+   import mx.rpc.remoting.Operation;
    import mx.rpc.remoting.RemoteObject;
    import mx.rpc.soap.WebService;
-   
-   
-   import es.guasax.messages.GuasaxError;
-   import es.guasax.messages.GuasaxMessageCodes;
-   import mx.rpc.remoting.Operation;
-   import flash.utils.setTimeout;
-   import es.guasax.container.GuasaxContainer;
-   import es.guasax.vo.ActionVO;
-   import flash.net.registerClassAlias;
-   import es.guasax.util.GuasaxUtil;
-   import mx.controls.Alert;
    
    public class ServiceLocator implements IServiceLocator
    {   
@@ -174,26 +164,6 @@ package es.guasax.services
       }
       
       /**
-       * Return the message Consumer for the given service id.
-       * @param serviceId the service id.
-       * @return the RemoteObject.
-       */
-      public function getConsumer( serviceId : String ) : Consumer
-      {
-         return Consumer( getServiceForId( serviceId ) );
-      }
-      
-      /**
-       * Return the message Produce for the given service id.
-       * @param serviceId the service id.
-       * @return the RemoteObject.
-       */
-      public function getProducer( serviceId : String ) : Producer
-      {
-         return Producer( getServiceForId( serviceId ) );
-      }
-         
-      /**
        * Set the credentials for all registered services. Note that services
        * that use a proxy or a third-party adapter to a remote endpoint will
        * need to setRemoteCredentials instead.
@@ -204,7 +174,6 @@ package es.guasax.services
       {
          setServiceCredentials( username, password );
          setHTTPServiceCredentials( username, password );
-         setMessageAgentCredentials( username, password );
       }
       
       /**
@@ -214,7 +183,6 @@ package es.guasax.services
       {
           logoutFromServices();
           logoutFromHTTPServices();
-          logoutFromMessageAgents();
       }
       
       /**
@@ -271,24 +239,6 @@ package es.guasax.services
       }
       
       /**
-       * Set the user's credentials on all registered message agents.
-       * @param username the username to set.
-       * @param password the password to set.
-       */
-      private function setMessageAgentCredentials(
-         username : String,
-         password : String ) : void
-      {
-         var list : Array = getMessageAgents();
-         
-         for ( var i : uint = 0; i < list.length; i++ )
-         {
-            var service : MessageAgent = list[ i ];
-            setCredentialsOnMessageAgent( service, username, password );
-         }
-      }
-      
-      /**
        * Logs the user out of all registered services.
        */
       private function logoutFromServices() : void
@@ -312,20 +262,6 @@ package es.guasax.services
          for ( var i : uint = 0; i < list.length; i++ )
          {
             var service : HTTPService = list[ i ];
-            service.logout();
-         }
-      }
-      
-      /**
-       * Logs the user out of all registered message agents.
-       */
-      private function logoutFromMessageAgents() : void
-      {
-          var list : Array = getMessageAgents();
-         
-         for ( var i : uint = 0; i < list.length; i++ )
-         {
-            var service : MessageAgent = list[ i ];
             service.logout();
          }
       }
@@ -355,22 +291,6 @@ package es.guasax.services
        */
       private function setCredentialsOnHTTPService(
           service : HTTPService,
-          username : String,
-          password : String ) : void
-      {
-          service.logout();
-          service.setCredentials( username, password );
-      }
-      
-      /**
-       * Sets the credentials on a message agent. Logout is called first to
-       * clear any existing credentials.
-       * @param service the message agent.
-       * @param username the username to set.
-       * @param password the password to set.
-       */
-      private function setCredentialsOnMessageAgent(
-          service : MessageAgent,
           username : String,
           password : String ) : void
       {
@@ -428,32 +348,6 @@ package es.guasax.services
          }
          
          return httpServices;
-      }
-      
-      /**
-       * Return the configured message agents.
-       * @return the message agents.
-       */
-      private function getMessageAgents() : Array
-      {         
-         if ( messageAgents == null )
-         {
-            messageAgents = new Array();
-            
-            var accessors : XMLList = getAccessors();
-         
-            for ( var i : uint = 0; i < accessors.length(); i++ )
-            {
-               var name : String = accessors[ i ];
-               var obj : Object = this[ name ];
-               if ( obj is MessageAgent )
-               {
-                  messageAgents.push( obj );
-               }
-            }
-         }
-         
-         return messageAgents;
       }
       
       /**

@@ -37,11 +37,12 @@ package es.guasax.services
 	 * allow service to be located and securitycredentials to be managed.
 	 * 
 	 */
-
-
+  /*
    import mx.messaging.Consumer;
    import mx.messaging.MessageAgent;
    import mx.messaging.Producer;
+   */
+   
    import mx.rpc.AbstractService;
    import mx.rpc.http.HTTPService;
    import mx.rpc.remoting.RemoteObject;
@@ -75,14 +76,14 @@ package es.guasax.services
 		 * @param serviceId the service id.
 		 * @return the RemoteObject.
 		 */
-      function getConsumer( destinationId : String ) : Consumer;
+     // function getConsumer( destinationId : String ) : Consumer;
       
 		/**
 		 * Return the message Produce for the given service id.
 		 * @param serviceId the service id.
 		 * @return the RemoteObject.
 		 */
-      function getProducer( destinationId : String ) : Producer;
+     // function getProducer( destinationId : String ) : Producer;
       
 		/**
 		 * Set the credentials for all registered services. Note that services
