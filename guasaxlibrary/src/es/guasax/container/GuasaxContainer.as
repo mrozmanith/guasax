@@ -37,6 +37,9 @@ package es.guasax.container
 	import es.guasax.messages.GuasaxError;
 	import es.guasax.messages.GuasaxMessageCodes;
 	import flash.utils.describeType;
+	import mx.utils.ObjectUtil;
+	import flash.net.registerClassAlias;
+	import flash.utils.getQualifiedClassName;
 	
 	public class GuasaxContainer
 	{
@@ -60,6 +63,10 @@ package es.guasax.container
 	      {
 	      	if ( instance == null )
 	      	{
+  			 	registerClassAlias("es.guasax.vo.ComponentVO", ComponentVO);
+			 	registerClassAlias("es.guasax.vo.ActionVO", ActionVO);
+			 	registerClassAlias("flash.utils.Dictionary",Dictionary);
+
 	      		instance = new GuasaxContainer();
 	      	}
 	      	return instance;
@@ -84,6 +91,27 @@ package es.guasax.container
 		 public function parseConfFile(xmlfilepath:String,callBackLoadComplete:Function):void {
 			 XMLConfParser.getInstance().parseConfFile(xmlfilepath,callBackLoadComplete);				 //GuasaxContainer.getInstance().setGuasaxConfigurationVO(guasaxConfigurationVO);
 		 }
+		 
+		 
+		 /**
+		 * 
+		 */ 
+		 public function registerClasses(classArray:Array):void{
+		 	for each (var className:Class in classArray) {
+		 		registerClassAlias(getQualifiedClassName(new className()),className);
+		 	}
+		 }
+		 /**
+		 * Creamos un componente a partir de identificador del mismo en el XML Conf. 
+		 */
+		 public function createComponent(componentType:String,name:String): ComponentVO {
+		 	
+		 	// TODO - Verificar que no existe un componente con este name, si existe lanzar exception
+		    var newComponentVO:ComponentVO = ObjectUtil.copy(instance.findComponent(componentType)) as ComponentVO;
+		    newComponentVO.name = name;		    
+		    instance.guasaxConfigurationVO.getComponents()[name] = newComponentVO;
+		 	return newComponentVO;
+		 }		 
 		
 		 /**
 		 * Execute an action without view redirection
