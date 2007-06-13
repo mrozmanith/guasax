@@ -2,8 +2,10 @@
 
 = Current production release 0.9.2 alpha =
 
-= Next release 0.9.3a =
+= Next release 0.9.4a =
 
+= 0.9.3a =
+  * Erase dependencies with FDS, is not necesary to load fds.swc to compile the guasax libray
 
 = 0.9.2a =
   * Change the way for load xml confguration file. Now this is asynchronous , and you receive a callBack event when load configuration is complete.
