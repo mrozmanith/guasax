@@ -1,6 +1,6 @@
 #summary A description of the changes between each release.
 
-= Current production release 0.9.2 alpha =
+= Current production release 0.9.3 alpha =
 
 = Next release 0.9.4a =
 
