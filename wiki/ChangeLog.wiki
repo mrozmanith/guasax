@@ -1,8 +1,11 @@
 #summary A description of the changes between each release.
 
-= Current production release 0.9.3 alpha =
+= Current production release 0.9.4 alpha =
 
-= Next release 0.9.4a =
+= Next release 0.9.5a =
+
+= 0.9.4a =
+  * Remove dependencies with LOCALE dir in guasax apps. Locale dir with guasax messages is inside guasax SWC file.
 
 = 0.9.3a =
   * Erase dependencies with FDS, is not necesary to load fds.swc to compile the guasax libray
