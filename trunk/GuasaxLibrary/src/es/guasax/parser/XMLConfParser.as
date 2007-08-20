@@ -36,6 +36,7 @@ package es.guasax.parser
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
+	import mx.messaging.channels.DirectHTTPChannel;
 	
 	/**
 	 * 
@@ -62,7 +63,14 @@ package es.guasax.parser
         private var globalPreInterActions  : Dictionary = new Dictionary();
         private var globalPostInterActions : Dictionary = new Dictionary();
         
-		private var myLoader:URLLoader;
+        // loader para el fichero principal 
+		private var myLoader        : URLLoader;
+		
+		// loader para  los diferentes ficheros include
+		//private var myLoaderInclude : URLLoader;
+		private var myLoadersInclude : Dictionary = new Dictionary();
+		
+		
        // ------------------------------------------------------------------------------------
         public static function getInstance() : XMLConfParser 
         {
@@ -90,8 +98,19 @@ package es.guasax.parser
 			instance.myLoader = new URLLoader();
 			instance.myLoader.addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXML);
 			instance.myLoader.addEventListener(Event.COMPLETE,callBackLoadComplete);
-			
 			instance.myLoader.load(new URLRequest(xmlpath));
+        }	
+
+
+        /**
+        * In this method we load the xml configuration file.
+	    * @param xmlpath Path to the xml configuration file  
+        */
+     	 public function parseIncludeConfFile(xmlpath:String):void {
+			instance.myLoadersInclude[xmlpath] = new URLLoader();
+			//instance.myLoadersInclude[xmlpath].addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXMLInclude);
+			instance.myLoadersInclude[xmlpath].addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXML);
+			instance.myLoadersInclude[xmlpath].load(new URLRequest(xmlpath));
         }	
         
                    
@@ -99,8 +118,11 @@ package es.guasax.parser
 		 * When myLoader.load finish , this method is invoked. In this method we start parsing the guasax
 		 * configuration
 		 */
-		private function loadGuasaxConfFromXML(evt:Event):void{
-			var myXML:XML = new XML(instance.myLoader.data);
+		private function loadGuasaxConfFromXML(event:Event):void{
+			var loader:URLLoader = URLLoader(event.currentTarget);
+			var myXML:XML        = new XML(loader.data);
+			
+			//var myXML:XML = new XML(instance.myLoader.data);
 			
         	var myXMLDocument:XMLDocument = new XMLDocument(); 
 	        myXMLDocument.ignoreWhite = true; 	        
@@ -109,9 +131,13 @@ package es.guasax.parser
     	    // accedemos al element root del documento
 			var root:XMLNode =  myXMLDocument.firstChild;
 			
-			// reading the version and description 			
-			instance.guasaxConfigurationVO.setDescription(root.attributes.description);
-			instance.guasaxConfigurationVO.setVersion(root.attributes.version);			
+			// reading the version and description 	
+			if(root.attributes.description != undefined){		
+				instance.guasaxConfigurationVO.setDescription(root.attributes.description);
+			}
+			if(root.attributes.version != undefined) {
+				instance.guasaxConfigurationVO.setVersion(root.attributes.version);			
+			}
 			
 			// Leemos los componentes propios o resto de ficheros con mas componentes 
 			for each (var mainnode:XMLNode in root.childNodes) {				
@@ -121,7 +147,8 @@ package es.guasax.parser
 					instance.parseGlobalInterceptors(mainnode);
 					
 				}else if(mainnode.nodeName == INCLUDE){	
-					instance.parseConfFile(mainnode.attributes.file,new Function());	
+					//instance.parseConfFile(mainnode.attributes.file,new Function());	
+					instance.parseIncludeConfFile(mainnode.attributes.file);	
 								
 				}else if(mainnode.nodeName == COMPONENT){	
 					instance.parseComponent(mainnode);
@@ -129,6 +156,42 @@ package es.guasax.parser
 				}
 			}
 		}
+		
+		/**
+		 * When myLoader.load finish , this method is invoked. In this method we start parsing the guasax
+		 * configuration
+		 */
+		 /*
+		private function loadGuasaxConfFromXMLInclude(event:Event):void{
+			var loader:URLLoader = URLLoader(event.currentTarget);
+			var myXML:XML = new XML(loader.data);
+			
+			
+        	var myXMLDocument:XMLDocument = new XMLDocument(); 
+	        myXMLDocument.ignoreWhite = true; 	        
+    	    myXMLDocument.parseXML(myXML.toString()); 
+    	    
+    	    // accedemos al element root del documento
+			var root:XMLNode =  myXMLDocument.firstChild;
+			
+			// Leemos los componentes propios o resto de ficheros con mas componentes 
+			for each (var mainnode:XMLNode in root.childNodes) {				
+				// If none type is include, then we parse this node like another guasax-conf.xml file
+				// Ej: <include file="login-component.xml"/>
+				if(mainnode.nodeName == GLOBAL_INTERCEPTORS){	
+					instance.parseGlobalInterceptors(mainnode);
+					
+				}else if(mainnode.nodeName == INCLUDE){	
+					//instance.parseConfFile(mainnode.attributes.file,new Function());	
+					instance.parseIncludeConfFile(mainnode.attributes.file);	
+								
+				}else if(mainnode.nodeName == COMPONENT){	
+					instance.parseComponent(mainnode);
+					
+				}
+			}
+		}		
+		*/
 
 		/**
 		 * 
