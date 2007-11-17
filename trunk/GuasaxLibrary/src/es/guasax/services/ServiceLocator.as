@@ -47,6 +47,7 @@ package es.guasax.services
    import mx.rpc.remoting.Operation;
    import mx.rpc.remoting.RemoteObject;
    import mx.rpc.soap.WebService;
+   import mx.rpc.AsyncToken;
    
    public class ServiceLocator implements IServiceLocator
    {   
@@ -79,9 +80,7 @@ package es.guasax.services
          {
             throw new GuasaxError(
                GuasaxMessageCodes.SINGLETON_EXCEPTION, "ServiceLocator" );
-               
          }
-            
          instance = this;
       }
       
@@ -98,25 +97,71 @@ package es.guasax.services
       								 resultFunc : Function, 
       								 faultFunc  : Function,
       								 objectResult : Object ):void{
-      	 var service : AbstractService = getService(serviceName);
+      	 // obtenemos el servicio por el nombre 								
+      	 var service : Object = getService(serviceName);
       	 
-      	 var operation : Operation = mx.rpc.remoting.Operation(service[methodName]);
-      	 if(params != null){
-      	 	operation.arguments = params;
+      	 /************************************************************************************/
+      	 /** Si el servicio es de tipo HTTPService **/
+      	 
+      	 if(service is HTTPService){
+			 service.cancel();
+			
+			 // preparamos un responseCallBack para almacenar esta ejecucion de operacion remota
+	      	 var responseCallBackHTTPService : ResponseCallBack = new ResponseCallBack();
+	      	 
+	      	 responseCallBackHTTPService.setActionVO(GuasaxContainer.getInstance().getCurrentActionVO());
+	      	 responseCallBackHTTPService.currentResultFuncion = resultFunc;
+	      	 responseCallBackHTTPService.currentFaultFuncion  = faultFunc;
+	      	 responseCallBackHTTPService.objectResult         = objectResult;			
+			
+			(HTTPService(service)).resultFormat = "e4x";
+			var token:AsyncToken = (HTTPService(service)).send(params);
+			token.resultHandler  = responseCallBackHTTPService.onResult;
+			token.faultHandler   = responseCallBackHTTPService.onFault;
+			
+      	 // Si el servicio es de tipo WebService 
+      	 }else if(service is WebService){
+	      	 service.loadWSDL();
+ 			 var operationWS : mx.rpc.soap.Operation = mx.rpc.soap.Operation(service[methodName]);
+	      	 if(params != null){
+	      	 	operationWS.arguments = params;
+	      	 }	    
+	      	 operationWS.resultFormat =  "e4x"; 
+	      	 	 
+	      	 // preparamos un responseCallBack para almacenar esta ejecucion de operacion remota
+	      	 var responseCallBackWS : ResponseCallBack = new ResponseCallBack();
+	      	 
+	      	 responseCallBackWS.setActionVO(GuasaxContainer.getInstance().getCurrentActionVO());
+	      	 responseCallBackWS.currentResultFuncion = resultFunc;
+	      	 responseCallBackWS.currentFaultFuncion  = faultFunc;
+	      	 responseCallBackWS.objectResult         = objectResult;
+	      	 
+	      	 // Ejecutamos la operacion 
+	      	 var callObjectWS : Object  = operationWS.send();  
+
+			 callObjectWS.resultHandler = responseCallBackWS.onResult;
+			 callObjectWS.faultHandler  = responseCallBackWS.onFault;   
+      	 	
+      	 // Si el servicio es de tipo WebService 
+      	 }else if(service is RemoteObject){
+			 var operation : Operation = mx.rpc.remoting.Operation(service[methodName]);
+	      	 if(params != null){
+	      	 	operation.arguments = params;
+	      	 }
+	      	 
+	      	 // preparamos un responseCallBack para almacenar esta ejecucion de operacion remota
+	      	 var responseCallBack : ResponseCallBack = new ResponseCallBack();
+	      	 
+	      	 responseCallBack.setActionVO(GuasaxContainer.getInstance().getCurrentActionVO());
+	      	 responseCallBack.currentResultFuncion = resultFunc;
+	      	 responseCallBack.currentFaultFuncion  = faultFunc;
+	      	 responseCallBack.objectResult         = objectResult;
+	      	 
+	      	 // Ejecutamos la operacion 
+	      	 var callObject : Object = operation.send();      	 
+			 callObject.resultHandler = responseCallBack.onResult;
+			 callObject.faultHandler  = responseCallBack.onFault;      	 	
       	 }
-      	 
-      	 // preparamos un responseCallBack para almacenar esta ejecucion de operacion remota
-      	 var responseCallBack : ResponseCallBack = new ResponseCallBack();
-      	 
-      	 responseCallBack.setActionVO(GuasaxContainer.getInstance().getCurrentActionVO());
-      	 responseCallBack.currentResultFuncion = resultFunc;
-      	 responseCallBack.currentFaultFuncion  = faultFunc;
-      	 responseCallBack.objectResult         = objectResult;
-      	 
-      	 // Ejecutamos la operacion 
-      	 var callObject : Object = operation.send();      	 
-		 callObject.resultHandler = responseCallBack.onResult;
-		 callObject.faultHandler  = responseCallBack.onFault;	      	 
       }
       
       /**
@@ -127,9 +172,9 @@ package es.guasax.services
        * @param The id of the service to be returned. This is the id defined in the
        * concrete service locator implementation.
        */
-      public function getService( serviceId : String ) : AbstractService
+      public function getService( serviceId : String ) : Object
       {
-          var service: AbstractService = AbstractService( getServiceForId( serviceId ) );
+          var service: Object =  getServiceForId( serviceId ) ;
           return service;
       }      
 
