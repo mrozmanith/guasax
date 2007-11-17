@@ -36,20 +36,20 @@ package es.guasax.parser
 	import flash.events.Event;
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
-	import mx.messaging.channels.DirectHTTPChannel;
+	import mx.controls.Alert;
 	
 	/**
-	 * 
-	 */
+	 * Main parser class.
+	 **/ 
 	public class XMLConfParser
 	{
 		// Singleton 
-		private static var instance    : XMLConfParser;
+		private static var instance       : XMLConfParser;
       
       	// constants for name of the elements in xml conf file
-        private const PREINTERCEPTORS  : String = "preinterceptors";
-        private const INTERCEPTOR      : String = "interceptor";
-        private const POSTINTERCEPTORS : String = "postinterceptors";
+        private const PREINTERCEPTORS     : String = "preinterceptors";
+        private const INTERCEPTOR         : String = "interceptor";
+        private const POSTINTERCEPTORS    : String = "postinterceptors";
 											          
         private const GLOBAL_INTERCEPTORS : String = "global-interceptors";
         private const COMPONENT           : String = "component";
@@ -60,17 +60,14 @@ package es.guasax.parser
       
         private var guasaxConfigurationVO : GuasaxConfigurationVO = GuasaxContainer.getInstance().getGuasaxConfigurationVO();
         
-        private var globalPreInterActions  : Dictionary = new Dictionary();
-        private var globalPostInterActions : Dictionary = new Dictionary();
+        private var globalPreInterActions : Dictionary = new Dictionary();
+        private var globalPostInterActions: Dictionary = new Dictionary();
         
-        // loader para el fichero principal 
-		private var myLoader        : URLLoader;
+		private var typeComponent 		  : String;
+		private var idComponent 		  : String;
 		
-		// loader para  los diferentes ficheros include
-		//private var myLoaderInclude : URLLoader;
-		private var myLoadersInclude : Dictionary = new Dictionary();
-		
-		
+		private var mainXmlFilePath  	  : String;
+		private var xmlComponentXML       : XML = new XML();
        // ------------------------------------------------------------------------------------
         public static function getInstance() : XMLConfParser 
         {
@@ -95,34 +92,24 @@ package es.guasax.parser
 	    * @param xmlpath Path to the xml configuration file  
         */
      	 public function parseConfFile(xmlpath:String,callBackLoadComplete:Function):void {
-			instance.myLoader = new URLLoader();
-			instance.myLoader.addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXML);
-			instance.myLoader.addEventListener(Event.COMPLETE,callBackLoadComplete);
-			instance.myLoader.load(new URLRequest(xmlpath));
+     	 	
+     	 	//La primera vez que se llama , nos lo guardamos 
+     	 	if(instance.mainXmlFilePath == null){
+     	 		instance.mainXmlFilePath = xmlpath;
+     	 	}
+			var myLoader : URLLoader = new URLLoader();
+			myLoader.addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXML);
+			myLoader.addEventListener(Event.COMPLETE,callBackLoadComplete);
+			myLoader.load(new URLRequest(xmlpath));
         }	
-
-
-        /**
-        * In this method we load the xml configuration file.
-	    * @param xmlpath Path to the xml configuration file  
-        */
-     	 public function parseIncludeConfFile(xmlpath:String):void {
-			instance.myLoadersInclude[xmlpath] = new URLLoader();
-			//instance.myLoadersInclude[xmlpath].addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXMLInclude);
-			instance.myLoadersInclude[xmlpath].addEventListener(Event.COMPLETE,instance.loadGuasaxConfFromXML);
-			instance.myLoadersInclude[xmlpath].load(new URLRequest(xmlpath));
-        }	
-        
                    
 		/**
 		 * When myLoader.load finish , this method is invoked. In this method we start parsing the guasax
 		 * configuration
 		 */
-		private function loadGuasaxConfFromXML(event:Event):void{
+		private function loadGuasaxConfFromXML(event:Event):void{		
 			var loader:URLLoader = URLLoader(event.currentTarget);
-			var myXML:XML        = new XML(loader.data);
-			
-			//var myXML:XML = new XML(instance.myLoader.data);
+			var myXML:XML        = new XML(loader.data);				
 			
         	var myXMLDocument:XMLDocument = new XMLDocument(); 
 	        myXMLDocument.ignoreWhite = true; 	        
@@ -131,13 +118,9 @@ package es.guasax.parser
     	    // accedemos al element root del documento
 			var root:XMLNode =  myXMLDocument.firstChild;
 			
-			// reading the version and description 	
-			if(root.attributes.description != undefined){		
-				instance.guasaxConfigurationVO.setDescription(root.attributes.description);
-			}
-			if(root.attributes.version != undefined) {
-				instance.guasaxConfigurationVO.setVersion(root.attributes.version);			
-			}
+			// reading the version and description 			
+			instance.guasaxConfigurationVO.setDescription(root.attributes.description);
+			instance.guasaxConfigurationVO.setVersion(root.attributes.version);			
 			
 			// Leemos los componentes propios o resto de ficheros con mas componentes 
 			for each (var mainnode:XMLNode in root.childNodes) {				
@@ -147,63 +130,36 @@ package es.guasax.parser
 					instance.parseGlobalInterceptors(mainnode);
 					
 				}else if(mainnode.nodeName == INCLUDE){	
-					//instance.parseConfFile(mainnode.attributes.file,new Function());	
-					instance.parseIncludeConfFile(mainnode.attributes.file);	
+					instance.parseConfFile(mainnode.attributes.file,new Function());	
 								
 				}else if(mainnode.nodeName == COMPONENT){	
-					instance.parseComponent(mainnode);
+					instance.parseComponent(mainnode,null);
 					
 				}
 			}
 		}
-		
-		/**
-		 * When myLoader.load finish , this method is invoked. In this method we start parsing the guasax
-		 * configuration
-		 */
-		 /*
-		private function loadGuasaxConfFromXMLInclude(event:Event):void{
-			var loader:URLLoader = URLLoader(event.currentTarget);
-			var myXML:XML = new XML(loader.data);
-			
-			
-        	var myXMLDocument:XMLDocument = new XMLDocument(); 
-	        myXMLDocument.ignoreWhite = true; 	        
-    	    myXMLDocument.parseXML(myXML.toString()); 
-    	    
-    	    // accedemos al element root del documento
-			var root:XMLNode =  myXMLDocument.firstChild;
-			
-			// Leemos los componentes propios o resto de ficheros con mas componentes 
-			for each (var mainnode:XMLNode in root.childNodes) {				
-				// If none type is include, then we parse this node like another guasax-conf.xml file
-				// Ej: <include file="login-component.xml"/>
-				if(mainnode.nodeName == GLOBAL_INTERCEPTORS){	
-					instance.parseGlobalInterceptors(mainnode);
-					
-				}else if(mainnode.nodeName == INCLUDE){	
-					//instance.parseConfFile(mainnode.attributes.file,new Function());	
-					instance.parseIncludeConfFile(mainnode.attributes.file);	
-								
-				}else if(mainnode.nodeName == COMPONENT){	
-					instance.parseComponent(mainnode);
-					
-				}
-			}
-		}		
-		*/
 
 		/**
-		 * 
+		 * Metodo utilizado comanto para parsear un componente cuando cargamos por primera vez el 
+		 * guasax file como cuando creamos una instancia del componente solo.
 		 * @param mainnode Component Node
 		 */
-		 private function parseComponent(mainnode:XMLNode):void{
-			var componentVO:ComponentVO    = new ComponentVO();
-		    var id       :String = String(mainnode.attributes.id);
-		    var className:String = String(mainnode.attributes.className);
-		    //var enabledComp:Boolean = Boolean(mainnode.attributes.enabled);
-		    componentVO.setId(id);
+		 private function parseComponent(mainnode:XMLNode,id:String):void{
+		 	var componentVO:ComponentVO  = new ComponentVO();
+			if(mainnode.attributes.id != undefined && mainnode.attributes.type != undefined ){
+				componentVO.setId(String(mainnode.attributes.id));
+				componentVO.setType(String(mainnode.attributes.type));
+			}else if(mainnode.attributes.id != undefined && mainnode.attributes.type == undefined ){
+				componentVO.setId(String(mainnode.attributes.id));
+				componentVO.setType(String(mainnode.attributes.id));
+			}else if(mainnode.attributes.id == undefined && mainnode.attributes.type != undefined ){
+				componentVO.setId(String(mainnode.attributes.type));//El componente del fichero XML tiene por nombre el valor del type que hayamos elegido en el xml, por defecto
+				componentVO.setType(String(mainnode.attributes.type));
+			}
+		           
+		    var className  :String       = String(mainnode.attributes.className);
 		    componentVO.setClassName(className);
+		    
 		    if(mainnode.attributes.enabled == "false"){
 		    	componentVO.setEnabled(false);
 		    }else{ // cualquier otra cosa true
@@ -213,7 +169,7 @@ package es.guasax.parser
 		    var refClass:Class = getDefinitionByName(className) as Class;
   		    componentVO.setInstanceBO(new refClass()); 
   		    
-  		    /* ahora poarseamos los children del compoenete que son las actions y las properties*/
+  		    /* Ahora parseamos los children del compoenete que son las actions y las properties*/
   		    
   		    for each (var actionOrPropertyNode:XMLNode in mainnode.childNodes) {
   		    	// If node type is Action
@@ -224,8 +180,12 @@ package es.guasax.parser
   		    		instance.parseProperty(actionOrPropertyNode,componentVO);
   		    	}	  			    	
   		    }
-	    	// Lo metemos  a la lista de componentes 
-			instance.guasaxConfigurationVO.getComponents()[id] = componentVO;
+	    	// Lo metemos  a la lista de componentes , si hemos pasado ID lo ponemos , sino , ponemos de nombre el tipo
+	    	if(mainnode.attributes.id != undefined ){
+				instance.guasaxConfigurationVO.getComponents()[String(mainnode.attributes.id) ]   = componentVO;
+	    	}else{
+				instance.guasaxConfigurationVO.getComponents()[String(mainnode.attributes.type)] = componentVO;
+	    	}
 		 	
 		 }
 			
@@ -257,10 +217,10 @@ package es.guasax.parser
   	    	var hasParameters:Boolean = hasParametersThisMethod(componentVO.getInstanceBO(),actionVO.getMethodName());
   	    	actionVO.setHasParameters(hasParameters);
   	    	
-  	    	var arrayRoles : Array = GuasaxUtil.stringToArray(actionNode.attributes.roles,",");
-  	    	// si el campo roles no esta definido , ponemos "*"
-  	    	if(arrayRoles == null){
-  	    		arrayRoles = ["*"]; // habilitado para todos los roles 
+  	    	// Si el atributo roles no esta definido , arrayRoles == null.
+  	    	var arrayRoles : Array = null;
+  	    	if(actionNode.attributes.roles != undefined){
+  	    		arrayRoles  = GuasaxUtil.stringToArray(actionNode.attributes.roles,",");
   	    	}
   	    	actionVO.setRoles(arrayRoles);
   	    	// verificamos si la action esta enabled o no
