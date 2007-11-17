@@ -55,4 +55,4 @@ package es.guasax.vo
 			return this.components;
 		}					
 	}
-}
+} 
