@@ -8,7 +8,7 @@
  * it under the terms of the GNU Lesser General Public License as published by
  * the Free Software Foundation; either version 2.1 of the License, or
  * (at your option) any later version.
- *
+ *    
  * Guasax is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -37,6 +37,7 @@ package es.guasax.container
 	import es.guasax.messages.GuasaxError;
 	import es.guasax.messages.GuasaxMessageCodes;
 	import flash.utils.describeType;
+	import es.guasax.util.GuasaxUtil;
 	import mx.utils.ObjectUtil;
 	import flash.net.registerClassAlias;
 	import flash.utils.getQualifiedClassName;
@@ -49,11 +50,14 @@ package es.guasax.container
 		  // configuration object
 		  private var guasaxConfigurationVO : GuasaxConfigurationVO = new GuasaxConfigurationVO();
 		  
+		  // fichero principal con la configuracion 
+		  public var xmlMainFilePath:String;
+		  
 		  // Current action 
 		  private var currentActionVO       : ActionVO;		  
 		  
 		  // Rol for current user 
-		  private var userRole              : String = SUPER_ADMIN; // default 
+		  private var userRoles              : String; // default 
 		  
 		  /********************************************************************************************/
 		  /********************************* final constants ***************************************/
@@ -88,11 +92,10 @@ package es.guasax.container
 		 * Parser for the configuration file 
 		 * @param xmlfilepath String with XML file path 
 		 */
-		 public function parseConfFile(xmlfilepath:String,callBackLoadComplete:Function):void {
-			 XMLConfParser.getInstance().parseConfFile(xmlfilepath,callBackLoadComplete);				 //GuasaxContainer.getInstance().setGuasaxConfigurationVO(guasaxConfigurationVO);
+		 public function parseConfFile(xmlMainFilePath:String,callBackLoadComplete:Function):void {
+		 	 instance.xmlMainFilePath = xmlMainFilePath;
+			 XMLConfParser.getInstance().parseConfFile(xmlMainFilePath,callBackLoadComplete);	
 		 }
-		 
-		 
 		 /**
 		 * 
 		 */ 
@@ -104,14 +107,20 @@ package es.guasax.container
 		 /**
 		 * Creamos un componente a partir de identificador del mismo en el XML Conf. 
 		 */
-		 public function createComponent(componentType:String,name:String): ComponentVO {
+		 public function createComponent(componentId:String,id:String): ComponentVO {
 		 	
+		 	/*XMLConfParser.getInstance().createComponent(componentType,name);
+		 	var newComponentVO:ComponentVO = GuasaxContainer.getInstance().findComponent(name);
+		 	*/
+		 	//registerClassAlias("es.guasax.vo.ComponentVO", ComponentVO);
+		 	//registerClassAlias("es.guasax.vo.ActionVO", ActionVO);
+		 	//registerClassAlias("flash.utils.Dictionary",Dictionary);
 		 	// TODO - Verificar que no existe un componente con este name, si existe lanzar exception
-		    var newComponentVO:ComponentVO = ObjectUtil.copy(instance.findComponent(componentType)) as ComponentVO;
-		    newComponentVO.name = name;		    
-		    instance.guasaxConfigurationVO.getComponents()[name] = newComponentVO;
+		    var newComponentVO:ComponentVO = ObjectUtil.copy(instance.findComponent(componentId)) as ComponentVO;
+		    newComponentVO.id = id;		    
+		    instance.guasaxConfigurationVO.getComponents()[id] = newComponentVO;
 		 	return newComponentVO;
-		 }		 
+		 }
 		
 		 /**
 		 * Execute an action without view redirection
@@ -119,19 +128,12 @@ package es.guasax.container
 		 * @param params Array of params
 		 * @return response object with information about action execution 
 		 */
-		 
 		 public function  executeAction(actionName :String, 
 					  		     	    params     :Array,
-					  		     	    viewObjectArray : Array = null,
-					  		     	    viewMethodName  : String = null,
-					  		     	    viewParams      : Array = null,
-					  		     	    afterService    : Boolean = false): ResponseActionVO {
-					  		     	    	
-			//TODO - Depends parameters passed , call a properly  method executeActionXYZ
-								  		     	    	
+					  		     	    componentId:String = null): ResponseActionVO {
 			var response:ResponseActionVO = new ResponseActionVO();
-			// 0.- find the action
-			instance.currentActionVO = findAction(actionName);
+			// 0.- find the action, para un componente, la buscamos en ese componenteId
+			instance.currentActionVO = findAction(actionName,componentId);
 			
 			// ---------------------------------------------------------------------------
 			instance.currentActionVO.setExecuteViewUpdateAfterRemoteService(false);
@@ -231,10 +233,9 @@ package es.guasax.container
   	    * De esta manera se pueden reutilizar mucho mas los metodos de updateView, al no estar marcados por 
   	    * la recepción de unos determinados parametros.
 		*/
-		public function executeViewUpdate(viewObjectArray:Array,viewMethodName:String,params:Array):void{
+		public function executeViewUpdate(viewObjectArray:Array,viewMethodName:String,viewParams:Array):void{
 			for each (var viewObject:Object in viewObjectArray) {
-//				var viewParams : Array = [params];
-				var viewParams : Array = params;
+				//var viewParams : Array = [params];
 				var classInfo:XML = describeType(viewObject);
 				// Listamos los metodos de la clase.
 				for each (var m:XML in classInfo.method) {
@@ -261,8 +262,16 @@ package es.guasax.container
 		 /**
 	     * Looking for  action 
 	     */
-	     public function findAction(actionId:String):ActionVO{
+	     public function findAction(actionId:String,componentId:String = null):ActionVO{
 	     	var actionVO:ActionVO = null;
+	     	// Si hemos pasado un nombre de componente concreto, devolvemos la action de ese, ya que tendrá las
+	     	// acciones delegadas a los metodos concretos de los BO(Ej:NoticiasBO, ProductosBO, etc...)
+			if(componentId != null){
+				var comp:ComponentVO = guasaxConfigurationVO.getComponents()[componentId];
+				actionVO = comp.getActionsDictionary()[actionId];
+				return actionVO;
+			}
+			// Si no pasamos componentId(deprecated), busamos la actionId entre los diferentes componentes
 			for each (var component:ComponentVO in guasaxConfigurationVO.getComponents()){
 	        	if(component.getActionsDictionary()[actionId] != null){
 	        		actionVO = component.getActionsDictionary()[actionId];
@@ -280,20 +289,20 @@ package es.guasax.container
 	     * Looking for  component
 	     */
 	     public function findComponent(componentId:String):ComponentVO{
-        	return guasaxConfigurationVO.getComponents()[componentId];componentVO;
+        	return guasaxConfigurationVO.getComponents()[componentId];
 	     }	     
 	     
 		 /**
 	     * Habilita o deshabilita un component para ser ejecutado.
 	     * Si un componente esta deshabilitado las acciones de este no se ejecutarán
-	     * @param componentId ID for the component
+	     * @param componentName Name of the component
 	     * @param value       true or false value for enabled property of component 
 	     */
-	     public function setEnabledComponent(componentId:String,value:Boolean):void{
-	     	var componentVO : ComponentVO =  findComponent(componentId);
+	     public function setEnabledComponent(componentName:String,value:Boolean):void{
+	     	var componentVO : ComponentVO =  findComponent(componentName);
 	     	if(componentVO == null){
 	     		throw new GuasaxError(
-               		GuasaxMessageCodes.COMPONENT_NOT_FOUND_EXCEPTION, "["+componentId+"]" );
+               		GuasaxMessageCodes.COMPONENT_NOT_FOUND_EXCEPTION, "["+componentName+"]" );
 	     	}
 	     	componentVO.setEnabled(value);
 	     }	   
@@ -301,11 +310,11 @@ package es.guasax.container
 	     * 
 		 * @param component ID for the component
 	     */ 
-		 public function isEnabledComponent(componentId:String):Boolean{
-	     	var componentVO : ComponentVO =  findComponent(componentId);
+		 public function isEnabledComponent(componentName:String):Boolean{
+	     	var componentVO : ComponentVO =  findComponent(componentName);
 	     	if(componentVO == null){
 	     		throw new GuasaxError(
-               		GuasaxMessageCodes.COMPONENT_NOT_FOUND_EXCEPTION, "["+componentId+"]" );
+               		GuasaxMessageCodes.COMPONENT_NOT_FOUND_EXCEPTION, "["+componentName+"]" );
 	     	}
 	     	return componentVO.isEnabled(); 
 	     }	  	      
@@ -347,21 +356,47 @@ package es.guasax.container
 
 			//0.- miramos si la accion esta delegada y si es asñi reasignamos la acccionVO a la delegada
 			if(actionVO.getDelegateActionId() != null){
-				actionVO = findAction(actionVO.getDelegateActionId());
+				actionVO = findAction(actionVO.delegateActionId,actionVO.delegateComponentId);
 			}
 	        // 1.- comprobamos que el componente y la action estan habilitados
 	        // si la action existe , miramos si esta habilitado su componente y esta action
 	        if(!actionVO.getComponentVO().isEnabled()){
-	        	throw new GuasaxError(GuasaxMessageCodes.COMPONENT_NOT_ENABLED_EXCEPTION, "["+actionVO.getComponentVO().getId()+"]" );
+	        	throw new GuasaxError(GuasaxMessageCodes.COMPONENT_NOT_ENABLED_EXCEPTION, "["+actionVO.getComponentVO().getType()+"]" );
 	        }
 	        if(!actionVO.isEnabled()){
 	        	throw new GuasaxError(GuasaxMessageCodes.ACTION_NOT_ENABLED_EXCEPTION, "["+actionVO.getActionId()+"]" );
 	        }
-	        // 1.1.- verificamos si tenenmos el role necesario para ejecutar la action
-	        var roles : Array = actionVO.getRoles();
+	        
+	        
+			 // 1.1.- verificamos si tenenmos el role necesario para ejecutar la action
+	        var actionRolesArray : Array = actionVO.getRoles();
+	        var userRolesArray   : Array = GuasaxUtil.stringToArray(userRoles,",");
+	        // miramos si alguno de los roles del usuario está en los de la acción, 
+	        // Nota: Si la accion no tiene roles definidos LA puede ejecutar todo el mundo.
+	        if(actionRolesArray != null){ //verificamos si el usuario contiene el rol de la action
+	            //Alert.show("actinoroles:"+actionRoles);
+	        	var match:Boolean = false;
+				for each(var actionrol:String in actionRolesArray){
+					for each(var userrol:String in userRolesArray){					
+						if(actionrol == userrol){
+							match = true;
+							//Alert.show("El usuario contiene el rol necesario");
+							break;
+						}
+					}
+				}	 
+				if(!match){
+					//Alert.show("El usuario NO contiene el rol necesario");
+					throw new GuasaxError(GuasaxMessageCodes.USER_ROLE_NOT_LEVEL_EXCEPTION, "["+userRoles+"]" );					
+				}       	
+	        }	        
+	        
+	        /*
 	        if(roles.indexOf(userRole) == -1 && roles.indexOf("*")==-1){
 	        	throw new GuasaxError(GuasaxMessageCodes.USER_ROLE_NOT_LEVEL_EXCEPTION, "["+userRole+"]" );
 	        }
+	        */
+	        
 	        
     		// 2.- Seteamos la accion que vamos a ejecutar en el  framework, para poder desde cualquier parte 
     		// de nuestro programa poder acceder a la action actual, incluso desde el codigo de los interceptors, 
@@ -479,11 +514,11 @@ package es.guasax.container
 	     	return instance.guasaxConfigurationVO;
 	     }
 	     //------------------------------------------------------------
-	     public function setUserRole(userRole: String):void {
-	     	instance.userRole = userRole;
+	     public function setUserRoles(userRoles: String):void {
+	     	instance.userRoles = userRoles;
 	     }
-	     public function getUserRole():String {
-	     	return instance.userRole;
+	     public function getUserRoles():String {
+	     	return instance.userRoles;
 	     }
 	     
 	     	
