@@ -23,54 +23,51 @@
 package es.guasax.vo
 {
 	import flash.utils.Dictionary;
+	import es.guasax.messages.GuasaxMessageCodes;
+	import es.guasax.messages.GuasaxError;
 	
 	public class ComponentVO
 	{
-		// identificador del compoenente  , depreacted por "name"
-		public var  id          : String;
-		
-		// identificador del tipo compoenente 
-		public var  type          : String;
-		
-		// Nombre de este componente concreto. 
-		public var  name          : String;
-		
+		// identificador del tipo de compoenente 
+		public var type       : String;
+		// identificador de "este" compoenente particular
+		public var id         : String;
 		// clase de negocio (BO) del componente
-		private var className  : String;
+		public var className  : String;		
+		
 		// Instancia en obj  del componente
-		private var instanceBO : Object;
+		public var instanceBO : Object;
 		// diccionario de acciones (ActionVO) de este compoenente 
-		private var actionsDictionary : Dictionary = new Dictionary();
+		public var actionsDictionary : Dictionary = new Dictionary();
 		// indica si el componente esta habilitado o inhabilitado, todo el componente independientemente de cada accion
 		[Bindable]
-		private var enabled    : Boolean = true;
+		public var enabled    : Boolean = true;
 		
-		private var roles      : Array   = ["*"]; //por defecto todos los roles
+		public var roles      : Array; 
 		
 		// Propiedades que se cargan en el componente en en fichero de descripción del mismo.
 		// Ej: <property key="NUMERO_INTENTOS" value="3"/>	
-		private var properties : Dictionary = new Dictionary();
+		public var properties : Dictionary = new Dictionary();
 		
-	// -------- GETTER and SETTER ---------------
-		public function setId(id:String):void{
-			this.id = id;
-		}
-		public function getId():String{
-			return this.id;
-		}	
-
+		//
+		// Lista de objetos vista de este componente.
+		//
+		public var views      : Dictionary = new Dictionary();
+	
+		
+		// -------- GETTER and SETTER ---------------
 		public function setType(type:String):void{
 			this.type = type;
 		}
 		public function getType():String{
 			return this.type;
 		}	
-		// ------------------------------------------
-		public function setName(name:String):void{
-			this.name = name;
+		// ----------------------------------------
+		public function setId(id:String):void{
+			this.id = id;
 		}
-		public function getName():String{
-			return this.name;
+		public function getId():String{
+			return this.id;
 		}	
 		// ----------------------------------------
 		public function setClassName(className:String):void{
@@ -121,7 +118,22 @@ package es.guasax.vo
 		public function addProperty( key:String, value:Object) : void {
 			this.properties[key] = value;			
 		}						
-							
+// ----------------------------------------
+		public function getViews( ) : Dictionary {
+			return  this.views;			
+		}						
+		public function setViews( views:Dictionary) : void {
+			this.views = views;			
+		}						
+// ----------------------------------------
+// TODO - Comprobar que no existe una vista con este nombre en este componente
+		public function addView(view:Object, key:String ) : void {
+			if ( this.views[key] != null ) {
+	            throw new GuasaxError(GuasaxMessageCodes.VIEW_ALREADY_REGISTERED_EXCEPTION, key );
+        	}
+			this.views[key] = view;			
+		}						
+					
 
 	}
 }
